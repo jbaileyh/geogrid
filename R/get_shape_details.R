@@ -1,8 +1,8 @@
-get_shape_details <- function(shape)
+get_shape_details <- function(input_shape)
 {
-
+  input_shape <- input_shape
   # function to get shape details
-  nhex <- length(shape)
+  nhex <- length(input_shape)
 
   if (nhex < 4)
   {
@@ -11,10 +11,10 @@ get_shape_details <- function(shape)
 
   # Start off with guidance but start with bins that are too large
   # (cellsize too large)
-  xmax <- summary(shape)[2][[1]][1, 2]
-  ymax <- summary(shape)[2][[1]][2, 2]
-  xmin <- summary(shape)[2][[1]][1, 1]
-  ymin <- summary(shape)[2][[1]][2, 1]
+  xmax <- summary(input_shape)[2][[1]][1, 2]
+  ymax <- summary(input_shape)[2][[1]][2, 2]
+  xmin <- summary(input_shape)[2][[1]][1, 1]
+  ymin <- summary(input_shape)[2][[1]][2, 1]
   xrange <- (xmax - xmin)
   yrange <- (ymax - ymin)
   start_width <- ifelse(xrange > yrange, xrange, yrange)
@@ -23,7 +23,7 @@ get_shape_details <- function(shape)
   # or long. If they want something this small then a hexmap is probably
   # not worth it.
   start_size <- start_width/4
-  total_area <- shape@polygons[[1]]@Polygons[[1]]@area
+  total_area <- input_shape@polygons[[1]]@Polygons[[1]]@area
 
 
   shape_details <- list(nhex, xmax, ymax, xmin, ymin, xrange, yrange,
