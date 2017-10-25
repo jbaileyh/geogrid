@@ -43,8 +43,7 @@ plot(shapes)
 ```
 ```{r example, message = FALSE}
 shape_dts <- get_shape_details(input_shape = shapes)
-grids <- calculate_cell_size(shape = shp,
-                                 shape_details = shp_dts,
+grids <- calculate_cell_size(shape = shapes, shape_details = shp_dts,
                                  learning_rate = 0.03,
                                  grid_type = 'hexagonal')
 ```
