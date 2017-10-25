@@ -33,7 +33,7 @@ assign_polygons <- function(shape, new_polygons, method)
   for (i in 1:vector_length)
   {
 
-    if (plan == "sm")
+    if (method == "sm")
     {
       i <- order(shape_areas)[i]
     }
