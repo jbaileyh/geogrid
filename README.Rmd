@@ -39,14 +39,17 @@ library(devtools)
 install_github("sassalley/hexmapr")
 library(hexmapr)
 shapes <- read_polygons("inst/extdata/london_LA.json")
-plot(shapes)
-```
-```{r example, message = FALSE}
+
 shape_dts <- get_shape_details(input_shape = shapes)
-grids <- calculate_cell_size(shape = shapes, shape_details = shape_dts,
-                                 learning_rate = 0.03,
-                                 grid_type = 'hexagonal')
-result <- assign_polygons(shape = shapes, new_polygons = grids, method = "sm")
+
+grids <- calculate_cell_size(shape = shapes, 
+                             shape_details = shape_dts,
+                             learning_rate = 0.03,
+                             grid_type = 'hexagonal')
+
+result <- assign_polygons(shape = shapes, 
+                          new_polygons = grids, 
+                          method = "sm")
 ```
 
 ## Notes

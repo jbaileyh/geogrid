@@ -56,7 +56,7 @@ assign_polygons <- function(shape, new_polygons, method)
     takenVec[i] <- which.min(distVec)
     takenVecIndex <- takenVec[takenVec > 0]
 
-    if (plan == "hungarian")
+    if (method == "hungarian")
     {
       # hexpolsdf@data$key2 <- paste0(hexpolsdf@data$x, hexpolsdf@data$y)
       costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
@@ -68,7 +68,7 @@ assign_polygons <- function(shape, new_polygons, method)
     }
   }
 
-  if (plan != "hungarian")
+  if (method != "hungarian")
   {
 
     PointAssignTemps <- originalPoints[closestSiteVec, ]
