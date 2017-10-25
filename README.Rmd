@@ -50,6 +50,7 @@ grids <- calculate_cell_size(shape = shapes,
 result <- assign_polygons(shape = shapes, 
                           new_polygons = grids, 
                           method = "sm")
+
 ```
 
 ## Notes

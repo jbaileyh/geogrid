@@ -60,10 +60,8 @@ assign_polygons <- function(shape, new_polygons, method)
     {
       # hexpolsdf@data$key2 <- paste0(hexpolsdf@data$x, hexpolsdf@data$y)
       costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
-      colnames(costmatrix) <- paste0(new_points@coords[, 1], new_points@coords[,
-                                                                               2])
-      rownames(costmatrix) <- paste0(originalPoints@coords[, 1],
-                                     originalPoints@coords[, 2])
+      colnames(costmatrix) <- paste0(new_points@coords[, 1], new_points@coords[, 2])
+      rownames(costmatrix) <- paste0(originalPoints@coords[, 1], originalPoints@coords[, 2])
       hungarian_costmin <- hungarian_cc(costmatrix)
     }
   }
@@ -84,6 +82,7 @@ assign_polygons <- function(shape, new_polygons, method)
 
     combi <- merge(shape@data, FinalTable, by = "key_orig")
     combi2 <- merge(s_poly, combi, by = "key_new")
+    return(combi2)
   } else
   {
 
