@@ -11,12 +11,16 @@ get_shape_details <- function(input_shape)
 
   # Start off with guidance but start with bins that are too large
   # (cellsize too large)
-  shape_summary <- summary(input_shape)
+  shape_summary <- input_shape@bbox
   
-  xmax <- shape_summary[2][[1]][1, 2]
-  ymax <- shape_summary[2][[1]][2, 2]
-  xmin <- shape_summary[2][[1]][1, 1]
-  ymin <- shape_summary[2][[1]][2, 1]
+  #xmax <- shape_summary[2][[1]][1, 2]
+  input_shape@bbox[3]
+  #ymax <- shape_summary[2][[1]][2, 2]
+  input_shape@bbox[4]
+  #xmin <- shape_summary[2][[1]][1, 1]
+  input_shape@bbox[1]
+  #ymin <- shape_summary[2][[1]][2, 1]
+  input_shape@bbox[2]
   xrange <- (xmax - xmin)
   yrange <- (ymax - ymin)
   start_width <- ifelse(xrange > yrange, xrange, yrange)
