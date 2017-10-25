@@ -34,13 +34,16 @@ There are three ways to assign the locations to new points on the grid (this is 
 
 ## Example
 This is a basic example which shows how the assignment of London boroughs could work. 
-```{r example}
+```{r example, message = FALSE}
 library(devtools)
 install_github("sassalley/hexmapr")
-
-
+library(hexmapr)
+shapes <- read_polygons("inst/extdata/london_LA.json")
+plot(shapes)
 ```
-
+```{r example, message = FALSE}
+shape_details <- hexmapr::
+```
 
 ## Notes
 
