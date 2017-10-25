@@ -1,0 +1,24 @@
+Package: hexmapr
+Title: Assigning real spaces to hexagonal and regular grids
+Version: 0.0.0.1
+Authors@R: person("Joseph", "Bailey", email = "jbailey@futurecities.catapult.org.uk", role = c("aut", "cre"))
+Description: This package helps you to turn irregular polygons (such as geographical regions) into regular grids. 
+    It enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns 
+    the content of the existing polygons to the new grid in three different ways. This prevents the need for manual
+    generation of hexgrids or regular grids that are supposed to reflect existing geography. 
+Depends: R (>= 3.4.0)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    DBI (>= 0.7),        
+    magrittr (>= 1.5),        
+    packrat (>= 0.4.8-1), 
+    Rcpp (>= 0.12.12),
+    rgdal (>= 1.2-7),      
+    rgeos (>= 0.3-23),     
+    sf (>= 0.5-3),      
+    sp (>= 1.2-4),      
+    udunits2 (>= 0.13),       
+    units (>= 0.4-5)  
+LinkingTo: Rcpp, RcppArmadillo
