@@ -1,3 +1,0 @@
-useDynLib(hexmapr, .registration=TRUE)
-exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp, evalCpp)
