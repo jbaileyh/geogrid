@@ -42,7 +42,7 @@ shapes <- read_polygons("inst/extdata/london_LA.json")
 plot(shapes)
 ```
 ```{r example, message = FALSE}
-shape_dts <- get_shape_details(shape = shapes)
+shape_dts <- get_shape_details(input_shape = shapes)
 grids <- calculate_cell_size(shape = shp,
                                  shape_details = shp_dts,
                                  learning_rate = 0.03,
