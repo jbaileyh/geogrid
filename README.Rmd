@@ -37,7 +37,7 @@ There are three ways to assign the locations to new points on the grid (this is 
 
 ## Example
 This is a basic example which shows how the assignment of London boroughs could work. 
-```{r example, message = FALSE}
+```{r example, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
 library(devtools)
 library(viridis)
 library(ggplot2)
@@ -51,13 +51,13 @@ grid_types <- rep(c('regular','hexagonal'), each = 3)
 methods <- rep(c('southwest_corner','sm_lg', 'hungarian'), times = 2)
 learning_rate <- rep(0.03, times = 6)
 
-  original_shapes <- read_polygons(input_file)
-  
-  original_details <- get_shape_details(original_shapes)
-  
-  new_cells <-  calculate_cell_size(original_shapes, original_details,learning_rate, 'regular')
-  
-  result <- assign_polygons(original_shapes,new_cells, 'hungarian')
+  # original_shapes <- read_polygons(input_file)
+  # 
+  # original_details <- get_shape_details(original_shapes)
+  # 
+  # new_cells <-  calculate_cell_size(original_shapes, original_details,learning_rate, 'regular')
+  # 
+  # result <- assign_polygons(original_shapes,new_cells, 'hungarian')
 
 
 demo <- mapply(gridify,input_file,grid_types,methods,learning_rate)
@@ -66,7 +66,9 @@ lapply(demo,class)
 ```
 
 Now we have an example transfer from real space to grid space - we can visualise it. 
-```{r example1, message = FALSE, fig.retina=TRUE, out.width = '100%'}
+```{r example1, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+rbpal <- colorRampPalette(viridis(10))
+
 clean <- function(shape){
   shape@data$id = rownames(shape@data)
   shape.points = fortify(shape, region="id")
@@ -82,7 +84,7 @@ text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
 ```
 
 
-```{r example2, message = FALSE, fig.retina=TRUE, out.width = '100%'}
+```{r example2, message = FALSE,results='hide',fig.keep='all'}
 
 ggplot(demo2) +
   geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
@@ -92,6 +94,15 @@ ggplot(demo2) +
   guides(fill=FALSE) +
  theme_void()
 ```
+
+## TODO
+
+Lots:
+
+- Isolate the grid generation so that it can be a choice (it's not deterministic at the moment)
+- Remove all options that aren't `hungarian`.
+- Troubleshoot the merging under the method `hexagonal | hungarian`
+
 
 ## Notes
 
