@@ -63,18 +63,21 @@ clean <- function(shape){
 
 demo2 <- lapply(demo, clean) %>% bind_rows(.id = 'method')
 
-read_polygons(input_file) %>% clean() %>%
-ggplot() +
-  geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
-  geom_text(aes(long, lat, label = substr(NAME,1,4)), size=2,color = "white") +
-  scale_fill_viridis() +
- theme_void()
+raw <- read_polygons(input_file)
+par(mar=c(0,0,2,0))
+plot(raw, col = rbpal(10)[as.numeric(cut(raw$HECTARES,breaks = 10))], border = NA, main = "Input polygons")
+text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
+```
+
+
+```{r example2, message = FALSE, fig.retina=TRUE, out.width = '100%'}
 
 ggplot(demo2) +
   geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
   geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
   facet_wrap(~method, ncol=3) +
   scale_fill_viridis() +
+  guides(fill=FALSE) +
  theme_void()
 ```
 
