@@ -49,7 +49,7 @@ shape_dts <- get_shape_details(input_shape = shapes)
 grids <- calculate_cell_size(shape = shapes, 
                              shape_details = shape_dts,
                              learning_rate = 0.03,
-                             grid_type = 'regular')
+                             grid_type = 'hexagonal')
 
 result <- assign_polygons(shape = shapes, 
                           new_polygons = grids, 
@@ -60,8 +60,8 @@ Now we have an example transfer from real space to grid space - we can visualise
 ```{r example1, message = FALSE, fig.retina=TRUE, out.width = '100%'}
 #Generate colours for the plotting
 rbpal <- colorRampPalette(viridis(20))
-colors1 = rbpal(20)[as.numeric(cut(shapes$CENSUSAREA,breaks = 10))]
-colors2 = rbpal(20)[as.numeric(cut(result$CENSUSAREA,breaks = 10))]
+colors1 = rbpal(20)[as.numeric(cut(shapes$HECTARES,breaks = 10))]
+colors2 = rbpal(20)[as.numeric(cut(result$HECTARES,breaks = 10))]
 
 par(mfrow=c(2,1), mar=c(1,1,1,1),bg = "black")
 plot(shapes, col = colors1, border = NA, main = "Polygon area (ha)")
