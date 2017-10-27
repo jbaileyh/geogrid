@@ -12,7 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     DBI (>= 0.7),
-    dplyr (>=0.7.2),
+    dplyr (>= 0.7.2),
     magrittr (>= 1.5),        
     packrat (>= 0.4.8-1), 
     Rcpp (>= 0.12.12),
