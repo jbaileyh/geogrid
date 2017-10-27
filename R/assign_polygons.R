@@ -1,4 +1,5 @@
 assign_polygons <- function(shape, new_polygons)
+  
 {
   originalPoints <- gCentroid(shape, byid = TRUE)
   shape@data$CENTROIX <- originalPoints$x

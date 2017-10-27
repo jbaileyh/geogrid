@@ -45,20 +45,53 @@ library(plyr)
 library(dplyr)
 install_github("sassalley/hexmapr")
 library(hexmapr)
+rbpal <- colorRampPalette(viridis(10))
 
 input_file <- rep("inst/extdata/london_LA.json", times = 6)
 grid_types <- c('regular','hexagonal')
 learning_rate <- rep(0.03, times = 2)
-
-
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
-new_cells <-  calculate_cell_size(original_shapes, original_details,learning_rate, 'regular', seed = 1)
-result <- assign_polygons(original_shapes,new_cells, 'hungarian')
+```
+
+For reference, lets see how they are actually bounded in real space:
+```{r example0, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+raw <- read_polygons(input_file)
+par(mar=c(0,0,2,0))
+plot(raw, col = rbpal(10)[as.numeric(cut(raw$HECTARES,breaks = 10))], border = NA, main = "Input polygons")
+text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
+```
+
+
+First of all, we can generate a number of different grids using set.seed. Since there are many ways to dissect the boundary of the polygons you might want to choose an output that appeals to you. I'd reccomend looking at different seeds and choosing the one that best matches the outline that you approve of. 
+```{r example1, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+par(mfrow=c(2,3), mar = c(0,0,2,0))
+for (i in 1:6){
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', i)
+plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
+}
+```
+And the same can be done with a regular grid.
+```{r example2, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+par(mfrow=c(2,3), mar = c(0,0,2,0))
+for (i in 1:6){
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', i)
+plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
+}
+```
+
+Now, lets choose a grid and assign our existing places to it. 
+```{r example3, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', 3)
+resulthex <- assign_polygons(original_shapes,new_cells)
+
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', 3)
+resultreg <- assign_polygons(original_shapes,new_cells)
 ```
 
 Now we have an example transfer from real space to grid space - we can visualise it. 
-```{r example1, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example4, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+library(gridExtra)
 rbpal <- colorRampPalette(viridis(10))
 
 clean <- function(shape){
@@ -67,34 +100,33 @@ clean <- function(shape){
   shape.df = join(shape.points, shape@data, by="id")
 }
 
-demo2 <- lapply(demo, clean) %>% bind_rows(.id = 'method')
+result_df_hex <- clean(resulthex)
+result_df_reg <- clean(resultreg)
+
+
+hexplot <- ggplot(result_df_hex) +
+  geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
+  geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
+  scale_fill_viridis() +
+  guides(fill=FALSE) +
+ theme_void()
+
+regplot <- ggplot(result_df_reg) +
+  geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
+  geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
+  scale_fill_viridis() +
+  guides(fill=FALSE) +
+ theme_void()
 
 raw <- read_polygons(input_file)
 par(mar=c(0,0,2,0))
 plot(raw, col = rbpal(10)[as.numeric(cut(raw$HECTARES,breaks = 10))], border = NA, main = "Input polygons")
 text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
-```
 
-
-```{r example2, message = FALSE,results='hide',fig.keep='all'}
-
-ggplot(demo2) +
-  geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
-  geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
-  facet_wrap(~method, ncol=3) +
-  scale_fill_viridis() +
-  guides(fill=FALSE) +
- theme_void()
+grid.arrange(regplot, hexplot, ncol=2)
 ```
 
 ## TODO
-
-Lots:
-
-- Isolate the grid generation so that it can be a choice (it's not deterministic at the moment)
-- Remove all options that aren't `hungarian`.
-- Troubleshoot the merging under the method `hexagonal | hungarian`
-
 
 ## Notes
 
