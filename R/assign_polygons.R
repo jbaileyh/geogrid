@@ -1,10 +1,5 @@
-assign_polygons <- function(shape, new_polygons, method)
+assign_polygons <- function(shape, new_polygons)
 {
-
-  # possible methods = c('southwest_corner','sm_lg','hungarian') new
-  # polygons come from calculate_cell_size.R shape comes from
-  # read_polygons.R
-
   originalPoints <- gCentroid(shape, byid = TRUE)
   shape@data$CENTROIX <- originalPoints$x
   shape@data$CENTROIY <- originalPoints$y
@@ -26,16 +21,8 @@ assign_polygons <- function(shape, new_polygons, method)
 
   shape_areas <- rgeos::gArea(shape, byid = TRUE)
 
-
   for (i in 1:vector_length)
   {
-    if (method == "sm_lg")
-    {
-      i <- order(shape_areas)[i]
-    }
-
-    #Need to catch duplicate distances somehow - currently hoping
-    #that none are identical. 
     distVec <- spDistsN1(originalPoints, new_points[i], longlat = FALSE)
     minDistVec[i] <- min(distVec)
 
@@ -53,49 +40,22 @@ assign_polygons <- function(shape, new_polygons, method)
     takenVec[i] <- which.min(distVec)
     takenVecIndex <- takenVec[takenVec > 0]
 
-    if (method == "hungarian")
-    {
-      costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
-      colnames(costmatrix) <- paste0(new_points@coords[, 1], new_points@coords[, 2])
-      rownames(costmatrix) <- paste0(originalPoints@coords[, 1], originalPoints@coords[, 2])
-      hungarian_costmin <- hungarian_cc(costmatrix)
-    }
+    costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
+    colnames(costmatrix) <- paste0(new_points@coords[, 1], new_points@coords[, 2])
+    rownames(costmatrix) <- paste0(originalPoints@coords[, 1], originalPoints@coords[, 2])
+    hungarian_costmin <- hungarian_cc(costmatrix)
   }
 
-  if (method != "hungarian")
-  {
+  costmin_locs <- as.data.frame(which(hungarian_costmin == 1, arr.ind = TRUE))
+  costmin_locs$key_new <- colnames(costmatrix)[costmin_locs$col]
+  costmin_locs$key_orig <- rownames(costmatrix)[costmin_locs$row]
+  costmin_locs$CENTROIDX <- as.numeric(substr(costmin_locs$key_new,1, 15))
+  costmin_locs$CENTROIDy <- as.numeric(substr(costmin_locs$key_new,16, 30))
 
-    PointAssignTemps <- originalPoints[closestSiteVec, ]
-    FinalTable <- data.frame(as.data.frame(coordinates(s_poly)), closestSiteVec, minDistVec,
-                             PointAssignTemps)
+  FinalTable <- costmin_locs
 
-    names(FinalTable) <- c("GridX", "GridY", "ClosestSiteVec",
-                           "MinDist", "OrigX", "OrigY")
-    FinalTable$key_orig <- paste0(FinalTable$OrigX, FinalTable$OrigY)
-    FinalTable$key_new <- paste0(FinalTable$GridX, FinalTable$GridY)
-
-    combi <- sp::merge(shape@data, FinalTable, by.x = "key_orig")
-    combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
-    return(combi2)
+  combi <- sp::merge(shape@data, FinalTable, by.x = "key_orig")
+  combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
+  return(combi2)
     
-  } else
-  {
-
-    costmin_locs <- as.data.frame(which(hungarian_costmin == 1, arr.ind = TRUE))
-    costmin_locs$key_new <- colnames(costmatrix)[costmin_locs$col]
-    costmin_locs$key_orig <- rownames(costmatrix)[costmin_locs$row]
-    costmin_locs$CENTROIDX <- as.numeric(substr(costmin_locs$key_new,
-                                                1, 15))
-    costmin_locs$CENTROIDy <- as.numeric(substr(costmin_locs$key_new,
-                                                16, 30))
-
-    FinalTable <- costmin_locs
-
-    combi <- sp::merge(shape@data, FinalTable, by.x = "key_orig")
-    combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
-    return(combi2)
-    
-  }
-
-
 }

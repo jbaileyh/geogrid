@@ -1,6 +1,6 @@
-calculate_cell_size <- function(shape, shape_details, learning_rate, grid_type)
+calculate_cell_size <- function(shape, shape_details, learning_rate, grid_type, seed)
 {
-
+  set.seed(seed)
   # = c('regular', 'hexagonal') check that regular and hexagon dont
   # return different lists of points (list and list[[]] respectively?)
 
@@ -49,6 +49,3 @@ calculate_cell_size <- function(shape, shape_details, learning_rate, grid_type)
   return(list(HexPts, Pols))
 
 }
-
-
-

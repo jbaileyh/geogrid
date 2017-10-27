@@ -47,22 +47,14 @@ install_github("sassalley/hexmapr")
 library(hexmapr)
 
 input_file <- rep("inst/extdata/london_LA.json", times = 6)
-grid_types <- rep(c('regular','hexagonal'), each = 3)
-methods <- rep(c('southwest_corner','sm_lg', 'hungarian'), times = 2)
-learning_rate <- rep(0.03, times = 6)
-
-  # original_shapes <- read_polygons(input_file)
-  # 
-  # original_details <- get_shape_details(original_shapes)
-  # 
-  # new_cells <-  calculate_cell_size(original_shapes, original_details,learning_rate, 'regular')
-  # 
-  # result <- assign_polygons(original_shapes,new_cells, 'hungarian')
+grid_types <- c('regular','hexagonal')
+learning_rate <- rep(0.03, times = 2)
 
 
-demo <- mapply(gridify,input_file,grid_types,methods,learning_rate)
-names(demo) <- paste(grid_types,methods,sep=" | ")
-lapply(demo,class)
+original_shapes <- read_polygons(input_file)
+original_details <- get_shape_details(original_shapes)
+new_cells <-  calculate_cell_size(original_shapes, original_details,learning_rate, 'regular', seed = 1)
+result <- assign_polygons(original_shapes,new_cells, 'hungarian')
 ```
 
 Now we have an example transfer from real space to grid space - we can visualise it. 
