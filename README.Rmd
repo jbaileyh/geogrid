@@ -8,11 +8,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
+knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "README_figs/README-")
 ```
 
 # hexmapr
