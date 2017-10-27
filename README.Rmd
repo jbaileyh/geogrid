@@ -2,13 +2,11 @@
     title: "Gridding Geospatial Data"  
     author: "Joseph Bailey"  
     date: "`r format(Sys.Date())`"
-    output:  
-      html_document:  
-        keep_md: true  
+    output: rmarkdown::github_document
+
     ---  
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -37,7 +35,7 @@ There are three ways to assign the locations to new points on the grid (this is 
 
 ## Example
 This is a basic example which shows how the assignment of London boroughs could work. 
-```{r example, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 library(devtools)
 library(viridis)
 library(ggplot2)
@@ -55,16 +53,16 @@ original_details <- get_shape_details(original_shapes)
 ```
 
 For reference, lets see how they are actually bounded in real space:
-```{r example0, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example0, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 raw <- read_polygons(input_file)
-par(mar=c(0,0,2,0))
+par(mar=c(0,0,2,0), new=FALSE)
 plot(raw, col = rbpal(10)[as.numeric(cut(raw$HECTARES,breaks = 10))], border = NA, main = "Input polygons")
 text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
 ```
 
 
 First of all, we can generate a number of different grids using set.seed. Since there are many ways to dissect the boundary of the polygons you might want to choose an output that appeals to you. I'd reccomend looking at different seeds and choosing the one that best matches the outline that you approve of. 
-```{r example1, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example1, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 par(mfrow=c(2,3), mar = c(0,0,2,0))
 for (i in 1:6){
 new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', i)
@@ -72,7 +70,7 @@ plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
 }
 ```
 And the same can be done with a regular grid.
-```{r example2, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example2, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 par(mfrow=c(2,3), mar = c(0,0,2,0))
 for (i in 1:6){
 new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', i)
@@ -81,7 +79,7 @@ plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
 ```
 
 Now, lets choose a grid and assign our existing places to it. 
-```{r example3, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example3, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', 3)
 resulthex <- assign_polygons(original_shapes,new_cells)
 
@@ -90,7 +88,7 @@ resultreg <- assign_polygons(original_shapes,new_cells)
 ```
 
 Now we have an example transfer from real space to grid space - we can visualise it. 
-```{r example4, message = FALSE, warning=FALSE,results='hide',fig.keep='all'}
+```{r example4, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 library(gridExtra)
 rbpal <- colorRampPalette(viridis(10))
 
@@ -108,18 +106,20 @@ hexplot <- ggplot(result_df_hex) +
   geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
   geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
   scale_fill_viridis() +
+  coord_equal() +
   guides(fill=FALSE) +
  theme_void()
 
 regplot <- ggplot(result_df_reg) +
   geom_polygon( aes(x=long, y=lat, fill = HECTARES, group = group)) +
   geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
+  coord_equal() +
   scale_fill_viridis() +
   guides(fill=FALSE) +
  theme_void()
 
 raw <- read_polygons(input_file)
-par(mar=c(0,0,2,0))
+par(mar=c(0,0,2,0), new=FALSE)
 plot(raw, col = rbpal(10)[as.numeric(cut(raw$HECTARES,breaks = 10))], border = NA, main = "Input polygons")
 text(coordinates(raw), labels = substr(raw$NAME,1,4), cex = 0.5, col = "white")
 
