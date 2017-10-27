@@ -74,8 +74,8 @@ assign_polygons <- function(shape, new_polygons, method)
     FinalTable$key_orig <- paste0(FinalTable$OrigX, FinalTable$OrigY)
     FinalTable$key_new <- paste0(FinalTable$GridX, FinalTable$GridY)
 
-    combi <- merge(shape@data, FinalTable, by.x = "key_orig")
-    combi2 <- merge(s_poly, combi, by.x = "key_new")
+    combi <- base::merge(shape@data, FinalTable, by.x = "key_orig")
+    combi2 <- base::merge(s_poly, combi, by.x = "key_new")
     return(combi2)
     
   } else
@@ -91,8 +91,8 @@ assign_polygons <- function(shape, new_polygons, method)
 
     FinalTable <- costmin_locs
 
-    combi <- merge(shape@data, FinalTable, by.x = "key_orig")
-    combi2 <- merge(s_poly, combi, by.x = "key_new")
+    combi <- base::merge(shape@data, FinalTable, by.x = "key_orig")
+    combi2 <- base::merge(s_poly, combi, by.x = "key_new")
     return(combi2)
     
   }
