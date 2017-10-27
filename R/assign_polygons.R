@@ -26,19 +26,16 @@ assign_polygons <- function(shape, new_polygons, method)
 
   shape_areas <- rgeos::gArea(shape, byid = TRUE)
 
-  # plan = 'gridwise' (equals gridwise systematic from bottom left) plan
-  # = 'sm' (Order by placing smallest to largest) plan = 'hungarian'
-  # (Minimise total distance transfer)
 
   for (i in 1:vector_length)
   {
-
-    if (method == "sm")
+    if (method == "sm_lg")
     {
       i <- order(shape_areas)[i]
     }
 
-    # Need to catch duplicate distances somehow.
+    #Need to catch duplicate distances somehow - currently hoping
+    #that none are identical. 
     distVec <- spDistsN1(originalPoints, new_points[i], longlat = FALSE)
     minDistVec[i] <- min(distVec)
 
@@ -58,7 +55,6 @@ assign_polygons <- function(shape, new_polygons, method)
 
     if (method == "hungarian")
     {
-      # hexpolsdf@data$key2 <- paste0(hexpolsdf@data$x, hexpolsdf@data$y)
       costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
       colnames(costmatrix) <- paste0(new_points@coords[, 1], new_points@coords[, 2])
       rownames(costmatrix) <- paste0(originalPoints@coords[, 1], originalPoints@coords[, 2])
@@ -70,19 +66,18 @@ assign_polygons <- function(shape, new_polygons, method)
   {
 
     PointAssignTemps <- originalPoints[closestSiteVec, ]
-    FinalTable <- data.frame(coordinates(s_poly), closestSiteVec, minDistVec,
+    FinalTable <- data.frame(as.data.frame(coordinates(s_poly)), closestSiteVec, minDistVec,
                              PointAssignTemps)
-    # FinalTable = data.frame(coordinates(new_polygons2),
-    # closestSiteVec,minDistVec,PointAssignTemps)
 
-    names(FinalTable) <- c("HexagonX", "HexagonY", "ClosestSiteVec",
-                           "MinDist", "CENTROIDX", "CENTROIDY")
-    FinalTable$key_orig <- paste0(FinalTable$CENTROIDX, FinalTable$CENTROIDY)
-    FinalTable$key_new <- paste0(FinalTable$HexagonX, FinalTable$HexagonY)
+    names(FinalTable) <- c("GridX", "GridY", "ClosestSiteVec",
+                           "MinDist", "OrigX", "OrigY")
+    FinalTable$key_orig <- paste0(FinalTable$OrigX, FinalTable$OrigY)
+    FinalTable$key_new <- paste0(FinalTable$GridX, FinalTable$GridY)
 
-    combi <- merge(shape@data, FinalTable, by = "key_orig")
-    combi2 <- merge(s_poly, combi, by = "key_new")
+    combi <- merge(shape@data, FinalTable, by.x = "key_orig")
+    combi2 <- merge(s_poly, combi, by.x = "key_new")
     return(combi2)
+    
   } else
   {
 
@@ -96,10 +91,11 @@ assign_polygons <- function(shape, new_polygons, method)
 
     FinalTable <- costmin_locs
 
-    combi <- merge(shape@data, FinalTable, by = "key_orig")
-    combi2 <- merge(s_poly, combi, by = "key_new")
+    combi <- merge(shape@data, FinalTable, by.x = "key_orig")
+    combi2 <- merge(s_poly, combi, by.x = "key_new")
+    return(combi2)
+    
   }
 
-  return(combi2)
 
 }

@@ -11,7 +11,8 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    DBI (>= 0.7),        
+    DBI (>= 0.7),
+    dplyr (>=0.7.2),
     magrittr (>= 1.5),        
     packrat (>= 0.4.8-1), 
     Rcpp (>= 0.12.12),
@@ -20,5 +21,5 @@ Depends:
     sf (>= 0.5-3),      
     sp (>= 1.2-4),      
     udunits2 (>= 0.13),       
-    units (>= 0.4-5)  
+    units (>= 0.4-5)
 LinkingTo: Rcpp, RcppArmadillo
