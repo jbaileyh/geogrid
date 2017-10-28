@@ -30,10 +30,10 @@ The link in bullet 4 provides an excellent introduction to the notion of tessela
 
 Recent functionality for representing US states, European countries and World countries in a grid has been made available for ggplot2 [here](https://hafen.github.io/geofacet/) and there are many other great examples of **hand-specified** or **bespoke** grids. The challenge with this is that if you have a less commonly used geography then it might be hard to find a  **hand-specified** or **bespoke** grid for your area of interest. 
 
-What I wanted to do with `hexmapr` is make it easier to generate these grids in ways that might be visually appealing and then assign the original geographies to their gridded counterparts in a way that made sense. Using an input of geospatial polgyons hexmapr will generate either a regular or hexagonal grid, and then assign each of the polygons in your original file to that new grid. 
+What I wanted to do with `hexmapr` is make it easier to generate these grids in ways that might be visually appealing and then assign the original geographies to their gridded counterparts in a way that made sense. Using an input of geospatial polgyons `hexmapr` will generate either a regular or hexagonal grid, and then assign each of the polygons in your original file to that new grid. 
 
 ##Idea
-There are two steps to using hexmapr:
+There are two steps to using `hexmapr`:
 
 1. Generate a regular or hexagonal grid of your choice. There are lots of different arrangements of these grids so choosing one with the `calculate_cell_size` function and varying the `seed` is a good place to start. 
 2. Use the [**hungarian algorithm**](https://en.wikipedia.org/wiki/Hungarian_algorithm) to efficiently calculate the assignments from the original geography to the new geography. This involves identifying the solution where the total distance between the centroid of every original geography and its new centroid on the grid is minimised. For this I have included a previous implementation of the Hungarian algorithm kindly made available [here](https://github.com/RcppCore/rcpp-gallery/blob/gh-pages/src/2013-09-24-minimal-assignment.cpp). Huge thanks to Lars Simon Zehnder for this implementation.
@@ -140,9 +140,9 @@ grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
 The package has four functions:
 
 1. `read_polygons()`: this reads the geospatial polygons - essentially the `st_read` function from the package `sf`. Arguments:
-    - `file`: a path to your input shapefile or geoJSON (generally) depending on instaled drivers.
+    - `file`: a path to your input shapefile or geoJSON (generally) depending on installed drivers.
 2. `get_shape_details()`: this extracts key information from the polygons such as the extent and the number of different polygons in the shape. These details are used in `calculate_cell_size()`. Arguments:
-    - `input_shape`: your SpatialPolygonsDataFrame read in by `read_polygons()`
+    - `input_shape`: your SpatialPolygonsDataframe read in by `read_polygons()`.
 3. `calculate_cell_size()` given your input polygons this will generate the grid as specified by your arguments:
     - `shape`: the original polygons from `read_polygons()`
     - `shape_details`: the output object from `get_shape_details()`
@@ -156,6 +156,8 @@ The package has four functions:
 
 ## TODO
 
+- Assignment may not always work - check the `assign_polygons()` why does it only work sometimes?
+- Make it work (done i think), make it right (not yet), make it fast (not yet). 
 - Complete formal R documentation.
 - Add tests using `testthat`.
 - Improve the cellsize calculation methodology. 
@@ -163,7 +165,11 @@ The package has four functions:
 
 ## Notes
 
-This is my first attempt at a package and it is not yet correctly documented and test coverage is non-existent. I am in the process of implementing these things. Hopefully the package is small enough and the functions are simple enough that critiquing them is not too challenging. 
+This is my first attempt at a package and it is not yet correctly documented and test coverage is non-existent. I am in the process of implementing these things. Hopefully the package is small enough and the functions are simple enough that critiquing them is not too challenging. If it doesn't work i'd like suggestions for improvements and thanks in advance for providing them!
 
 I welcome critique and feedback. Blog post to follow. 
+
+## Thanks
+
+I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/). 
 
