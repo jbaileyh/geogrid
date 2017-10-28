@@ -135,11 +135,35 @@ grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
 
 ```
 
+## Details
+
+The package has four functions:
+
+1. `read_polygons()`: this reads the geospatial polygons - essentially the `st_read` function from the package `sf`. Arguments:
+    - `file`: a path to your input shapefile or geoJSON (generally) depending on instaled drivers.
+2. `get_shape_details()`: this extracts key information from the polygons such as the extent and the number of different polygons in the shape. These details are used in `calculate_cell_size()`. Arguments:
+    - `input_shape`: your SpatialPolygonsDataFrame read in by `read_polygons()`
+3. `calculate_cell_size()` given your input polygons this will generate the grid as specified by your arguments:
+    - `shape`: the original polygons from `read_polygons()`
+    - `shape_details`: the output object from `get_shape_details()`
+    - `learning_rate`: the rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
+    - `grid_type`: either `regular` for a square grid or `hexagonal` for a hexagonal grid. 
+    - `seed`: the seed to ensure you get the same grid output. 
+4. `assign_polygons()`: this will assign the original polygons to their new locations on the grid generated in `calculate_cell_size()`. It will find the solution that minimises the sum of the total distance between the original polygon centroids and eventual gridded centroids. Arguments:
+    - `shape`: the original polygons from `read_polygons()`
+    - `new_polygons`: the output (a list) from `calculate_cell_size()`.
+
+
 ## TODO
+
+- Complete formal R documentation.
+- Add tests using `testthat`.
+- Improve the cellsize calculation methodology. 
+- See if we can make it CRAN-worthy.
 
 ## Notes
 
 This is my first attempt at a package and it is not yet correctly documented and test coverage is non-existent. I am in the process of implementing these things. Hopefully the package is small enough and the functions are simple enough that critiquing them is not too challenging. 
 
-I welcome critique and feedback. 
+I welcome critique and feedback. Blog post to follow. 
 
