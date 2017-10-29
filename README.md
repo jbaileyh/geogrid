@@ -1,7 +1,7 @@
 Algorithmic tesselation with hexmapr
 ================
 Joseph Bailey
-2017-10-28
+2017-10-29
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 hexmapr
@@ -173,6 +173,7 @@ TODO
 -   Add tests using `testthat`.
 -   Improve the cellsize calculation methodology.
 -   See if we can make it CRAN-worthy.
+-   Get someone to answer [this stack overflow question](https://math.stackexchange.com/questions/2388000/find-topologically-closest-graph-under-constraints).
 
 Notes
 -----
@@ -185,3 +186,57 @@ Thanks
 ------
 
 I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
+
+Another example
+===============
+
+This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
+
+``` r
+#In the working directory of the package.
+input_file <- rep("inst/extdata/states.json")
+original_shapes <- read_polygons(input_file)
+original_details <- get_shape_details(original_shapes)
+raw <- read_polygons(input_file)
+raw@data$xcentroid <- coordinates(raw)[,1]
+raw@data$ycentroid <- coordinates(raw)[,2]
+
+result_df_raw <- clean(raw)
+rawplot <- ggplot(result_df_raw) +
+  geom_polygon( aes(x=long, y=lat, fill = CENSUSAREA, group = group)) +
+  geom_text(aes(xcentroid, ycentroid, label = substr(NAME,1,4)), size=2,color = "white") +
+  coord_equal() +
+  scale_fill_viridis() +
+  guides(fill=FALSE) +
+ theme_void()
+
+new_cells_hex <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', 6)
+resulthex <- assign_polygons(original_shapes,new_cells_hex)
+
+new_cells_reg <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', 1)
+resultreg <- assign_polygons(original_shapes,new_cells_reg)
+
+
+result_df_hex <- clean(resulthex)
+result_df_reg <- clean(resultreg)
+
+hexplot <- ggplot(result_df_hex) +
+  geom_polygon( aes(x=long, y=lat, fill = CENSUSAREA, group = group)) +
+  geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
+  scale_fill_viridis() +
+  coord_equal() +
+  guides(fill=FALSE) +
+ theme_void()
+
+regplot <- ggplot(result_df_reg) +
+  geom_polygon( aes(x=long, y=lat, fill = CENSUSAREA, group = group)) +
+  geom_text(aes(V1, V2, label = substr(NAME,1,4)), size=2,color = "white") +
+  coord_equal() +
+  scale_fill_viridis() +
+  guides(fill=FALSE) +
+ theme_void()
+
+grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
+```
+
+<img src="README_figs/README-example5-1.png" width="768" style="display: block; margin: auto;" />
