@@ -185,7 +185,7 @@ I welcome critique and feedback. Blog post to follow.
 Thanks
 ------
 
-I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc), [Thomas Lin Pedersen](https://www.data-imaginist.com/about/) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
+I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc), [Thomas Lin Pedersen](https://www.data-imaginist.com/about/), [Mara Averick](https://twitter.com/dataandme?lang=en) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
 
 Other examples
 ==============
