@@ -185,10 +185,10 @@ I welcome critique and feedback. Blog post to follow.
 Thanks
 ------
 
-I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
+I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc), [Thomas Lin Pedersen](https://www.data-imaginist.com/about/) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
 
-Another example
-===============
+Other examples
+==============
 
 This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
 
@@ -209,13 +209,38 @@ rawplot <- ggplot(result_df_raw) +
   scale_fill_viridis() +
   guides(fill=FALSE) +
  theme_void()
+```
 
+Let's check the seeds again.
+
+``` r
+par(mfrow=c(2,3), mar = c(0,0,2,0))
+for (i in 1:6){
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', i)
+plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
+}
+```
+
+<img src="README_figs/README-example6-1.png" width="768" style="display: block; margin: auto;" />
+
+``` r
+par(mfrow=c(2,3), mar = c(0,0,2,0))
+for (i in 1:6){
+new_cells <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', i)
+plot(new_cells[[2]], main = paste("Seed",i, sep=" "))
+}
+```
+
+<img src="README_figs/README-example6a-1.png" width="768" style="display: block; margin: auto;" />
+
+Now we've seen some seed demo's lets assign them...
+
+``` r
 new_cells_hex <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', 6)
 resulthex <- assign_polygons(original_shapes,new_cells_hex)
 
-new_cells_reg <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', 1)
+new_cells_reg <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', 4)
 resultreg <- assign_polygons(original_shapes,new_cells_reg)
-
 
 result_df_hex <- clean(resulthex)
 result_df_reg <- clean(resultreg)
@@ -239,4 +264,51 @@ regplot <- ggplot(result_df_reg) +
 grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
 ```
 
-<img src="README_figs/README-example5-1.png" width="768" style="display: block; margin: auto;" />
+<img src="README_figs/README-example7-1.png" width="768" style="display: block; margin: auto;" />
+
+Likewise, you can try the bay area...
+
+``` r
+#In the working directory of the package.
+input_file <- rep("inst/extdata/bay_counties.geojson")
+original_shapes <- read_polygons(input_file)
+original_details <- get_shape_details(original_shapes)
+raw <- read_polygons(input_file)
+raw@data$xcentroid <- coordinates(raw)[,1]
+raw@data$ycentroid <- coordinates(raw)[,2]
+
+result_df_raw <- clean(raw)
+rawplot <- ggplot(result_df_raw) +
+  geom_polygon( aes(x=long, y=lat, group = group)) +
+  geom_text(aes(xcentroid, ycentroid, label = substr(county,1,4)), size=2,color = "white") +
+  coord_equal() +
+  guides(fill=FALSE) +
+ theme_void()
+
+new_cells_hex <-  calculate_cell_size(original_shapes, original_details,0.03, 'hexagonal', 6)
+resulthex <- assign_polygons(original_shapes,new_cells_hex)
+
+new_cells_reg <-  calculate_cell_size(original_shapes, original_details,0.03, 'regular', 1)
+resultreg <- assign_polygons(original_shapes,new_cells_reg)
+
+result_df_hex <- clean(resulthex)
+result_df_reg <- clean(resultreg)
+
+hexplot <- ggplot(result_df_hex) +
+  geom_polygon( aes(x=long, y=lat, group = group)) +
+  geom_text(aes(V1, V2, label = substr(county,1,4)), size=2,color = "white") +
+  coord_equal() +
+  guides(fill=FALSE) +
+ theme_void()
+
+regplot <- ggplot(result_df_reg) +
+  geom_polygon( aes(x=long, y=lat, group = group)) +
+  geom_text(aes(V1, V2, label = substr(county,1,4)), size=2,color = "white") +
+  coord_equal() +
+  guides(fill=FALSE) +
+ theme_void()
+
+grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
+```
+
+<img src="README_figs/README-example8-1.png" width="768" style="display: block; margin: auto;" />
