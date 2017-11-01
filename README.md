@@ -1,7 +1,7 @@
 Algorithmic tesselation with hexmapr
 ================
 Joseph Bailey
-2017-10-29
+2017-11-01
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 hexmapr
@@ -50,8 +50,7 @@ install_github("sassalley/hexmapr")
 library(hexmapr)
 library(gridExtra)
 
-#In the working directory of the package.
-input_file <- rep("inst/extdata/london_LA.json")
+input_file <- system.file('extdata', 'london_LA.json', package='hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 ```
@@ -193,8 +192,7 @@ Other examples
 This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
 
 ``` r
-#In the working directory of the package.
-input_file <- rep("inst/extdata/states.json")
+input_file <- system.file('extdata', 'states.json', package = 'hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 raw <- read_polygons(input_file)
@@ -269,8 +267,7 @@ grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
 Likewise, you can try the bay area...
 
 ``` r
-#In the working directory of the package.
-input_file <- rep("inst/extdata/bay_counties.geojson")
+input_file <- system.file('extdata', 'bay_counties.geojson', package = 'hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 raw <- read_polygons(input_file)

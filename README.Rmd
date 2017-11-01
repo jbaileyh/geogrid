@@ -50,8 +50,7 @@ install_github("sassalley/hexmapr")
 library(hexmapr)
 library(gridExtra)
 
-#In the working directory of the package.
-input_file <- rep("inst/extdata/london_LA.json")
+input_file <- system.file('extdata', 'london_LA.json', package='hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 ```
@@ -177,8 +176,7 @@ I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](h
 # Other examples
 This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same. 
 ```{r example5, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
-#In the working directory of the package.
-input_file <- rep("inst/extdata/states.json")
+input_file <- system.file('extdata', 'states.json', package = 'hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 raw <- read_polygons(input_file)
@@ -244,8 +242,7 @@ grid.arrange(rawplot,regplot, hexplot, layout_matrix = rbind(c(1,1),c(2,3)))
 
 Likewise, you can try the bay area...
 ```{r example8, message = FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
-#In the working directory of the package.
-input_file <- rep("inst/extdata/bay_counties.geojson")
+input_file <- system.file('extdata', 'bay_counties.geojson', package = 'hexmapr')
 original_shapes <- read_polygons(input_file)
 original_details <- get_shape_details(original_shapes)
 raw <- read_polygons(input_file)
