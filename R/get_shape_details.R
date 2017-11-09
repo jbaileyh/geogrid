@@ -28,7 +28,7 @@ get_shape_details <- function(input_shape)
   # Let's assume that the user want's something more than 4 hexagons wide
   # or long. If they want something this small then a hexmap is probably
   # not worth it.
-  start_size <- start_width/4
+  start_size <- start_width/100
   total_area <- input_shape@polygons[[1]]@Polygons[[1]]@area
 
 
