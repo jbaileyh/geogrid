@@ -6,11 +6,7 @@ Description: This package helps you to turn irregular polygons (such as geograph
     It enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns 
     the content of the existing polygons to the new grid in three different ways. This prevents the need for manual
     generation of hexgrids or regular grids that are supposed to reflect existing geography. 
-Depends: R (>= 3.4.0)
-License: MIT
-Encoding: UTF-8
-LazyData: true
-Depends: 
+Depends: Depends: 
     DBI (>= 0.7),
     dplyr (>= 0.7.2),
     magrittr (>= 1.5),        
@@ -22,4 +18,8 @@ Depends:
     sp (>= 1.2-4),      
     udunits2 (>= 0.13),       
     units (>= 0.4-5)
+License: MIT
+Encoding: UTF-8
+LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
+Suggests: testthat
