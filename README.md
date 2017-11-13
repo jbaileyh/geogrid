@@ -1,7 +1,7 @@
 Algorithmic tesselation with hexmapr
 ================
 Joseph Bailey
-2017-11-01
+2017-11-13
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 hexmapr
@@ -188,6 +188,12 @@ I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](h
 
 Other examples
 ==============
+
+From others:
+
+Simon Hailstone has looked at [male life expectancy in the South East region of England](http://rpubs.com/Hailstone/326118) using the package. Thanks Simon for using!
+
+From me:
 
 This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
 
