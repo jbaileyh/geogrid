@@ -46,6 +46,6 @@ calculate_cell_size <- function(shape, shape_details, learning_rate, grid_type, 
   # match between then and now note <- cellsize could be unsolveable. Add
   # rotation of grid if needed.
 
-  return(list(HexPts, Pols))
+  return(list(HexPts, Pols, cellsize))
 
 }
