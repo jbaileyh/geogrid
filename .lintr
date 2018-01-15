@@ -1,0 +1,9 @@
+cache_directory: ".lintr_cache"
+linters: with_defaults(
+    commented_code_linter = NULL,
+    NULL
+  )
+exclusions:
+  list(
+    "R/RcppExports.R"
+  )

@@ -1,51 +1,116 @@
-calculate_cell_size <- function(shape, shape_details, learning_rate, grid_type, seed)
-{
-  set.seed(seed)
+#' Calculate size of grid items.
+#'
+#' Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param shape_details An object returned from calling \code{get_shape_details} on \code{shape}. If not specified, it will be automatically computed from \code{shape}.
+#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
+#' @param grid_type Either "hexagonal" for a hexagonal grid (default) or "regular" for a regular grid.
+#' @param seed An optional random seed integer to be used for the grid calculation algorithm.
+#' @param verbose A logical indicating whether messages should be printed as the algorithm iterates.
+#' @importFrom sp spsample HexPoints2SpatialPolygons SpatialPixels
+#' @importFrom methods as
+#' @export
+#' @examples
+#' \dontrun{
+#' input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+#' original_shapes <- read_polygons(input_file)
+#'
+#' # calculate grid
+#' new_cells <- calculate_cell_size(shape = original_shapes,
+#'   grid_type = "hexagonal", seed = 1)
+#' plot(new_cells)
+#'
+#' #
+#' grid_shapes <- assign_polygons(original_shapes, new_cells)
+#' par(mfrow=c(1, 2))
+#' sp::plot(original_shapes)
+#' sp::plot(grid_shapes)
+#'
+#' # look at different grids using different seeds
+#' par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
+#' for (i in 1:6) {
+#'   new_cells <- calculate_cell_size(shape = original_shapes, grid_type = "hexagonal", seed = i)
+#'   plot(new_cells, main = paste("Seed", i, sep=" "))
+#' }
+#' }
+calculate_cell_size <- function(shape, shape_details = NULL,
+  learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+  seed = NULL, verbose = FALSE) {
+
+  if (!is.null(seed))
+    set.seed(seed)
   # = c('regular', 'hexagonal') check that regular and hexagon dont
   # return different lists of points (list and list[[]] respectively?)
 
+  if (is.null(shape_details))
+    shape_details <- get_shape_details(shape)
+
+  grid_type <- match.arg(grid_type)
+
+  if (!inherits(shape_details, "shape_details"))
+    stop("'shape_details' must be an object obtained ",
+      "from calling get_shape_details().")
+
   # Lets find some bounds for the optimisation that make sense.
-  max_allowed_area <- shape_details$total_area/shape_details$nhex
-  hexagon_diam <- sqrt(max_allowed_area/2.598076) * 2
+  # max_allowed_area <- shape_details$total_area / shape_details$nhex
+  # hexagon_diam <- sqrt(max_allowed_area / 2.598076) * 2
 
   cellsize <- shape_details$start_size
 
   repeat {
-    HexPts <- spsample(shape, type = grid_type, cellsize = cellsize, iter = 10000)
-    npolygons <- length(HexPts)
-    print(npolygons)
-    print(cellsize)
+    hex_pts <- sp::spsample(shape, type = grid_type,
+      cellsize = cellsize, iter = 10000)
+    npolygons <- length(hex_pts)
+    if (verbose) {
+      message(npolygons)
+      message(cellsize)
+    }
 
-    if (npolygons == shape_details$nhex)
-      break else if (npolygons > shape_details$nhex)
-      {
-        print("too many polygons")
-        cellsize_new <- cellsize * (1 + learning_rate)
-        cellsize <- cellsize_new
-      } else
-      {
-        # else (npolygons < shape_details$nhex)
-        print("too few polygons")
-        cellsize_new <- cellsize * (1 - learning_rate)
-        cellsize <- cellsize_new
-      }
+    if (npolygons == shape_details$nhex) {
+      break
+    } else if (npolygons > shape_details$nhex) {
+      if (verbose)
+        message("too many polygons")
+      cellsize_new <- cellsize * (1 + learning_rate)
+      cellsize <- cellsize_new
+    } else {
+      # else (npolygons < shape_details$nhex)
+      if (verbose)
+        message("too few polygons")
+      cellsize_new <- cellsize * (1 - learning_rate)
+      cellsize <- cellsize_new
+    }
   }
 
-  print(paste0("The cellsize is ", cellsize))
+  if (verbose)
+    message("The cellsize is ", cellsize)
 
-  if (grid_type == "hexagonal")
-  {
-    Pols <- HexPoints2SpatialPolygons(HexPts)
-  } else
-  {
-    Pols <- SpatialPixels(HexPts)
-    Pols <- as(Pols, "SpatialPolygons")
+  if (grid_type == "hexagonal") {
+    pols <- sp::HexPoints2SpatialPolygons(hex_pts)
+  } else {
+    pols <- sp::SpatialPixels(hex_pts)
+    pols <- methods::as(pols, "SpatialPolygons")
   }
   # or spatial polygons? need to turn this into same object as hexagons
   # above try making dataframe and going that route. need correct ids for
   # match between then and now note <- cellsize could be unsolveable. Add
   # rotation of grid if needed.
 
-  return(list(HexPts, Pols))
+  res <- list(hex_pts, pols)
+  class(res) <- c("geogrid", "list")
 
+  return(res)
+}
+
+#' Plot a "geogrid" object
+#'
+#' @param x An object of class "geogrid" to plot.
+#' @param y ignored
+#' @param ... Additional parameters passed to the "sp" package's plot method.
+#'
+#' @importFrom sp plot
+#' @method plot geogrid
+#' @export
+plot.geogrid <- function(x, y, ...) {
+  sp::plot(x[[2]], ...)
 }
