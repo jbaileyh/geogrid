@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_grid.R
 \name{calculate_grid}
 \alias{calculate_grid}
-\title{Calculate size of grid items.}
+\title{Calculate grid from spatial polygons.}
 \usage{
 calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
   "regular"), seed = NULL, verbose = FALSE)
@@ -19,7 +19,7 @@ calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
 \item{verbose}{A logical indicating whether messages should be printed as the algorithm iterates.}
 }
 \description{
-Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
 }
 \examples{
 \dontrun{

@@ -1,6 +1,6 @@
-#' Calculate size of grid items.
+#' Calculate grid from spatial polygons.
 #'
-#' Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+#' Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
 #' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
 #' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
 #' @param grid_type Either "hexagonal" for a hexagonal grid (default) or "regular" for a regular grid.
@@ -41,7 +41,7 @@ calculate_grid <- function(shape,
   # = c('regular', 'hexagonal') check that regular and hexagon dont
   # return different lists of points (list and list[[]] respectively?)
 
-  shape_details <- get_shape_details(shape)
+  shape_details <- get_shape_details_internal(shape)
 
   grid_type <- match.arg(grid_type)
 
@@ -98,6 +98,26 @@ calculate_grid <- function(shape,
   class(res) <- c("geogrid", "list")
 
   return(res)
+}
+
+#' Calculate size of grid items (deprecated).
+#'
+#' Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param shape_details deprecated.
+#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
+#' @param grid_type Either "hexagonal" for a hexagonal grid (default) or "regular" for a regular grid.
+#' @param seed An optional random seed integer to be used for the grid calculation algorithm.
+#' @param verbose A logical indicating whether messages should be printed as the algorithm iterates.
+#' @importFrom sp spsample HexPoints2SpatialPolygons SpatialPixels
+#' @importFrom methods as
+#' @export
+calculate_cell_size <- function(shape, shape_details = NULL,
+  learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+  seed = NULL, verbose = FALSE) {
+
+  stop("calculate_cell_size() has been deprecated. Please use " ,
+    "calculate_grid() instead.", call. = FALSE)
 }
 
 #' Plot a "geogrid" object
