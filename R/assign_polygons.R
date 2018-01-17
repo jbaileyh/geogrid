@@ -1,6 +1,6 @@
 #' Assign the polygons in the original spatial data to their new location.
 #'
-#' Assigns each polygon in the original file to a new location in the gridded geometry. Enables the use of three assignment algorithms.
+#' Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
 #'
 #' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
 #' @param new_polygons A "geogrid" object returned from \code{\link{calculate_grid}}.

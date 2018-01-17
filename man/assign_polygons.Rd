@@ -15,7 +15,7 @@ assign_polygons(shape, new_polygons)
 A SpatialPolygonsDataFrame.
 }
 \description{
-Assigns each polygon in the original file to a new location in the gridded geometry. Enables the use of three assignment algorithms.
+Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
 }
 \examples{
 \dontrun{
