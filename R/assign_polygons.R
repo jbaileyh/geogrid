@@ -1,62 +1,94 @@
-assign_polygons <- function(shape, new_polygons)
-  
-{
-  originalPoints <- gCentroid(shape, byid = TRUE)
-  shape@data$CENTROIX <- originalPoints$x
-  shape@data$CENTROIY <- originalPoints$y
-  shape@data$key_orig <- paste(originalPoints$x, originalPoints$y, sep = "_")
+#' Assign the polygons in the original spatial data to their new location.
+#'
+#' Assigns each polygon in the original file to a new location in the gridded geometry. Enables the use of three assignment algorithms.
+#'
+#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param new_polygons A "geogrid" object returned from \code{\link{calculate_cell_size}}.
+#' @importFrom rgeos gCentroid
+#' @importFrom sp SpatialPolygonsDataFrame coordinates spDistsN1 spDists merge
+#' @return A SpatialPolygonsDataFrame.
+#' @export
+#' @examples
+#' \dontrun{
+#' input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+#' original_shapes <- read_polygons(input_file)
+#'
+#' # calculate grid
+#' new_cells <- calculate_cell_size(shape = original_shapes,
+#'   grid_type = "hexagonal", seed = 1)
+#' plot(new_cells)
+#'
+#' #
+#' grid_shapes <- assign_polygons(original_shapes, new_cells)
+#' par(mfrow=c(1, 2))
+#' sp::plot(original_shapes)
+#' sp::plot(grid_shapes)
+#'
+#' # look at different grids using different seeds
+#' par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
+#' for (i in 1:6) {
+#'   new_cells <- calculate_cell_size(shape = original_shapes, grid_type = "hexagonal", seed = i)
+#'   plot(new_cells, main = paste("Seed", i, sep=" "))
+#' }
+#' }
+assign_polygons <- function(shape, new_polygons) {
+  original_points <- rgeos::gCentroid(shape, byid = TRUE)
+  shape@data$CENTROIX <- original_points$x
+  shape@data$CENTROIY <- original_points$y
+  shape@data$key_orig <- paste(original_points$x, original_points$y, sep = "_")
+
+  if (!inherits(new_polygons, "geogrid"))
+    stop("'new_polygons' must be an object obtained ",
+      "from calling calculate_cell_size().")
 
   new_points <- new_polygons[[1]]
   vector_length <- length(shape)
 
   new_polygons2 <- new_polygons[[2]]
-  polygonPoints <- gCentroid(new_polygons2, byid = TRUE)
-  s_poly <- SpatialPolygonsDataFrame(new_polygons2, as.data.frame(coordinates(new_polygons2)))
+  # polygon_points <- rgeos::gCentroid(new_polygons2, byid = TRUE)
+  s_poly <- sp::SpatialPolygonsDataFrame(
+    new_polygons2, as.data.frame(sp::coordinates(new_polygons2)))
   s_poly$key_new <- paste(s_poly@data$V1, s_poly@data$V2, sep = "_")
 
   # Define these vectors, used in the assignment loop.
-  closestSiteVec <- vector(mode = "numeric", length = vector_length)
-  minDistVec <- vector(mode = "numeric", length = vector_length)
-  takenVec <- vector(mode = "numeric", length = vector_length)
-  takenVecIndex <- integer(vector_length)
+  closest_site_vec <- vector(mode = "numeric", length = vector_length)
+  min_dist_vec <- vector(mode = "numeric", length = vector_length)
+  taken_vec <- vector(mode = "numeric", length = vector_length)
+  taken_vec_index <- integer(vector_length)
 
-  shape_areas <- rgeos::gArea(shape, byid = TRUE)
+  # shape_areas <- rgeos::gArea(shape, byid = TRUE)
 
-  for (i in 1:vector_length)
-  {
-    distVec <- spDistsN1(originalPoints, new_points[i], longlat = FALSE)
-    minDistVec[i] <- min(distVec)
+  for (i in 1:vector_length) {
+    dist_vec <- sp::spDistsN1(original_points, new_points[i], longlat = FALSE)
+    min_dist_vec[i] <- min(dist_vec)
 
-    if (i > 1)
-    {
-
-      distVec[takenVecIndex] <- NA
-      closestSiteVec[i] <- which.min(distVec)
-
-    } else
-    {
-      closestSiteVec[i] <- which.min(distVec)
+    if (i > 1) {
+      dist_vec[taken_vec_index] <- NA
+      closest_site_vec[i] <- which.min(dist_vec)
+    } else {
+      closest_site_vec[i] <- which.min(dist_vec)
     }
 
-    takenVec[i] <- which.min(distVec)
-    takenVecIndex <- takenVec[takenVec > 0]
+    taken_vec[i] <- which.min(dist_vec)
+    taken_vec_index <- taken_vec[taken_vec > 0]
 
-    costmatrix <- spDists(originalPoints, new_points, longlat = FALSE)
+    costmatrix <- sp::spDists(original_points, new_points, longlat = FALSE)
     colnames(costmatrix) <- paste(s_poly@data$V1, s_poly@data$V2, sep = "_")
-    rownames(costmatrix) <- paste(originalPoints@coords[, 1], originalPoints@coords[, 2], sep = "_")
+    rownames(costmatrix) <- paste(original_points@coords[, 1],
+      original_points@coords[, 2], sep = "_")
     hungarian_costmin <- hungarian_cc(costmatrix)
   }
 
   costmin_locs <- as.data.frame(which(hungarian_costmin == 1, arr.ind = TRUE))
   costmin_locs$key_new <- colnames(costmatrix)[costmin_locs$col]
   costmin_locs$key_orig <- rownames(costmatrix)[costmin_locs$row]
-  # costmin_locs$CENTROIDX <- as.numeric(strsplit(costmin_locs$key_new,"_")[[1]][1])
-  # costmin_locs$CENTROIDy <- as.numeric(strsplit(costmin_locs$key_new,"_")[[1]][1])
+  # val <- strsplit(costmin_locs$key_new, "_")
+  # costmin_locs$CENTROIDX <- as.numeric(val[[1]][1])
+  # costmin_locs$CENTROIDy <- as.numeric(vsl[[1]][1])
 
-  FinalTable <- costmin_locs
+  final_table <- costmin_locs
 
-  combi <- sp::merge(shape@data, FinalTable, by.x = "key_orig")
+  combi <- sp::merge(shape@data, final_table, by.x = "key_orig")
   combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
   return(combi2)
-    
 }

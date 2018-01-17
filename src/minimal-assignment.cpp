@@ -4,39 +4,38 @@
  * @license GPL (>= 2)
  * @tags armadillo
  * @summary Demonstrates the Minimal (or Maximal) Assignment Problem algorithm.
- *
  */
 
 /**
- * _Munkres' Assignment Algorithm_ 
+ * _Munkres' Assignment Algorithm_
  * ([Munkres (1957)](http://www.jstor.org/discover/10.2307/2098689?uid=3737864&uid=2&uid=4&sid=21102674250347),
- * also known as _hungarian algorithm_) is a well known algorithm 
- * in Operations Research solving the problem to optimally 
- * assign `N` jobs to `N` workers. 
+ * also known as _hungarian algorithm_) is a well known algorithm
+ * in Operations Research solving the problem to optimally
+ * assign `N` jobs to `N` workers.
  *
- * I needed to solve the _Minimal Assignment Problem_ for a 
+ * I needed to solve the _Minimal Assignment Problem_ for a
  * relabeling algorithm in MCMC sampling for _finite mixture_
- * distributions, where I use a random permutation Gibbs 
+ * distributions, where I use a random permutation Gibbs
  * sampler. For each sample an optimal labeling must be found,
  * i.e. I have `N` parameter vectors and must assign each vector
  * to one of the `N` components of the finite mixture under the restriction
  * that each component gets a parameter vector. For the assignment
- * of parameters to components 
- * [Stephens (1997b)] (http://www.isds.duke.edu/~scs/Courses/Stat376/Papers/Mixtures/LabelSwitchingStephensJRSSB.pdf) 
+ * of parameters to components
+ * [Stephens (1997b)] (http://www.isds.duke.edu/~scs/Courses/Stat376/Papers/Mixtures/LabelSwitchingStephensJRSSB.pdf)
  * suggests an algorithm relying on the Minimal Assignment in regard
  * to a _loss matrix_. The labeling with the smallest loss is
  * then considered as optimal.
  *
- * After an unsuccessful search for libraries implementing 
+ * After an unsuccessful search for libraries implementing
  * the algorithm easily for C++ or C, I made the decision to
- * program it myself using `RcppArmadillo` for good performance. 
- * I found some guidance by the websites of 
- * [Bob Pilgrim](http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html) and 
+ * program it myself using `RcppArmadillo` for good performance.
+ * I found some guidance by the websites of
+ * [Bob Pilgrim](http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html) and
  * [TopCoder] (http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=hungarianAlgorithm).
- * These websites offer excellent tutorials to understand 
- * the algorithm and to convert it to code. The order of this 
+ * These websites offer excellent tutorials to understand
+ * the algorithm and to convert it to code. The order of this
  * implementation of Munkres' algorithm is of an order `N` to the power of 4. There exists
- * also a version of order `N` to the power of 3, but an order of `N` to the power of 4 works 
+ * also a version of order `N` to the power of 3, but an order of `N` to the power of 4 works
  * very good for me and coding time is as usual a critical factor
  * for me.
  *
@@ -44,17 +43,17 @@
  * Munkres' algorithm and explain the main parts and their
  * functionality.
  *
- * Let's begin. The first step in Munkres' algorithm is to 
- * subtract the minimal element of each row from each element 
- * in this row.  
+ * Let's begin. The first step in Munkres' algorithm is to
+ * subtract the minimal element of each row from each element
+ * in this row.
  */
 
 #include<RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-void step_one(unsigned int &step, arma::mat &cost, 
-        const unsigned int &N) 
-{    
+void step_one(unsigned int &step, arma::mat &cost,
+        const unsigned int &N)
+{
     for (unsigned int r = 0; r < N; ++r) {
         cost.row(r) -= arma::min(cost.row(r));
     }
@@ -64,20 +63,20 @@ void step_one(unsigned int &step, arma::mat &cost,
 /**
  * Note, that we use references for all function arguments.
  * As we have to switch between the steps of the algorithm
- * continously, we always must be able to determine which 
+ * continously, we always must be able to determine which
  * step should be chosen next. Therefore we give a mutable
  * unsigned integer `step` as an argument to each step
- * function of the algorithm. 
+ * function of the algorithm.
  *
- * Inside the function we can easily access a whole row by 
+ * Inside the function we can easily access a whole row by
  * Armadillo's `row()` method for matrices.
  * In the second step, we then search for a zero in the
- * modified cost matrix of step one. 
+ * modified cost matrix of step one.
  */
 void step_two (unsigned int &step, const arma::mat &cost,
-        arma::umat &indM, arma::ivec &rcov, 
+        arma::umat &indM, arma::ivec &rcov,
         arma::ivec &ccov, const unsigned int &N)
-{                      
+{
     for (unsigned int r = 0; r < N; ++r) {
         for (unsigned int c = 0; c < N; ++c) {
             if (cost.at(r, c) == 0.0 && rcov.at(r) == 0 && ccov.at(c) == 0) {
@@ -102,19 +101,19 @@ void step_two (unsigned int &step, const arma::mat &cost,
  * a column and row - is called _starred zero_. In `step 2` we find
  * such a _starred zero_.
  *
- * Note, that we use here Armadillo's element access via the 
+ * Note, that we use here Armadillo's element access via the
  * method `at()`, which makes no bound checks and improves performance.
- * 
+ *
  * _Note Bene: This code is thoroughly debugged - never do this for fresh written
  * code!_
  *
- * In `step 3` we cover each column with a _starred zero_. If already 
+ * In `step 3` we cover each column with a _starred zero_. If already
  * `N` columns are covered all _starred zeros_ describe a complete
  * assignment - so, go to `step 7` and finish. Otherwise go to
  * `step 4`.
  */
 void step_three(unsigned int &step, const arma::umat &indM,
-        arma::ivec &ccov, const unsigned int &N) 
+        arma::ivec &ccov, const unsigned int &N)
 {
     unsigned int colcount = 0;
     for (unsigned int r = 0; r < N; ++r) {
@@ -136,7 +135,7 @@ void step_three(unsigned int &step, const arma::umat &indM,
     }
 }
 /**
- * We cover a column by looking for 1s in the indicator 
+ * We cover a column by looking for 1s in the indicator
  * matrix `indM` (See `step 2` for assuring that these are
  * indeed only _starred zeros_).
  *
@@ -147,7 +146,7 @@ void step_three(unsigned int &step, const arma::umat &indM,
  * searches for _noncovered zeros_.
  */
 void find_noncovered_zero(int &row, int &col,
-        const arma::mat &cost, const arma::ivec &rcov, 
+        const arma::mat &cost, const arma::ivec &rcov,
         const arma::ivec &ccov, const unsigned int &N)
 {
     unsigned int r = 0;
@@ -177,20 +176,20 @@ void find_noncovered_zero(int &row, int &col,
 /**
  * We can detect _noncovered zeros_ by checking if the cost matrix
  * contains at row r and column c a zero and row and column
- * are not covered yet, i.e. `rcov(r) == 0`, `ccov(c) == 0`. 
+ * are not covered yet, i.e. `rcov(r) == 0`, `ccov(c) == 0`.
  * This loop breaks, if we have found our first _uncovered zero_  or
- * no _uncovered zero_ at all. 
+ * no _uncovered zero_ at all.
  *
  * In `step 4`, if no _uncovered zero_ is found we go to `step 6`. If
- * instead an _uncovered zero_ has been found, we set the indicator 
- * matrix at its position to 2. We then have to search for a _starred 
+ * instead an _uncovered zero_ has been found, we set the indicator
+ * matrix at its position to 2. We then have to search for a _starred
  * zero_ in the row with the _uncovered zero_, _uncover_ the column with
- * the _starred zero_ and _cover_ the row with the _starred zero_. To 
- * indicate a _starred zero_ in a row and to find it we create again 
+ * the _starred zero_ and _cover_ the row with the _starred zero_. To
+ * indicate a _starred zero_ in a row and to find it we create again
  * two helper functions.
  */
 bool star_in_row(int &row, const arma::umat &indM,
-        const unsigned int &N) 
+        const unsigned int &N)
 {
     bool tmp = false;
     for (unsigned int c = 0; c < N; ++c) {
@@ -202,8 +201,8 @@ bool star_in_row(int &row, const arma::umat &indM,
     return tmp;
 }
 
-void find_star_in_row (const int &row, int &col, 
-        const arma::umat &indM, const unsigned int &N) 
+void find_star_in_row (const int &row, int &col,
+        const arma::umat &indM, const unsigned int &N)
 {
     col = -1;
     for (unsigned int c = 0; c < N; ++c) {
@@ -214,62 +213,62 @@ void find_star_in_row (const int &row, int &col,
 }
 /**
  * We know that _starred zeros_ are indicated by the indicator
- * matrix containing an element equal to 1. 
+ * matrix containing an element equal to 1.
  * Now, `step 4`.
  */
 void step_four (unsigned int &step, const arma::mat &cost,
         arma::umat &indM, arma::ivec &rcov, arma::ivec &ccov,
-        int &rpath_0, int &cpath_0, const unsigned int &N) 
+        int &rpath_0, int &cpath_0, const unsigned int &N)
 {
     int row = -1;
     int col = -1;
     bool done = false;
     while(!done) {
         find_noncovered_zero(row, col, cost, rcov,
-                ccov, N);                                 
-                                                        
-        if (row == -1) {                                
+                ccov, N);
+
+        if (row == -1) {
             done = true;
             step = 6;
         } else {
             /* uncovered zero */
-            indM(row, col) = 2;                         
-            if (star_in_row(row, indM, N)) {                            
-                find_star_in_row(row, col, indM, N);    
+            indM(row, col) = 2;
+            if (star_in_row(row, indM, N)) {
+                find_star_in_row(row, col, indM, N);
                 /* Cover the row with the starred zero
                  * and uncover the column with the starred
-                 * zero. 
+                 * zero.
                  */
-                rcov.at(row) = 1;                         
-                ccov.at(col) = 0;                          
+                rcov.at(row) = 1;
+                ccov.at(col) = 0;
             } else {
-                /* No starred zero in row with 
-                 * uncovered zero 
+                /* No starred zero in row with
+                 * uncovered zero
                  */
                 done = true;
                 step = 5;
                 rpath_0 = row;
                 cpath_0 = col;
-            }            
+            }
         }
     }
 }
 /**
  * Notice the `rpath_0` and `cpath_0` variables. These integer
  * variables store the first _vertex_ for an _augmenting path_ in `step 5`.
- * If zeros could be _primed_ we go further to `step 5`. 
+ * If zeros could be _primed_ we go further to `step 5`.
  *
  * `Step 5` constructs a path beginning at an _uncovered primed
- * zero_ (this is actually graph theory - alternating and augmenting 
- * paths) and alternating between _starred_ and _primed zeros_. 
- * This path is continued until a _primed zero_ with no _starred 
- * zero_ in its column is found. Then, all _starred zeros_ in 
- * this path are _unstarred_ and all _primed zeros_ are _starred_. 
+ * zero_ (this is actually graph theory - alternating and augmenting
+ * paths) and alternating between _starred_ and _primed zeros_.
+ * This path is continued until a _primed zero_ with no _starred
+ * zero_ in its column is found. Then, all _starred zeros_ in
+ * this path are _unstarred_ and all _primed zeros_ are _starred_.
  * All _primes_ in the indicator matrix are erased and all rows
  * are _uncovered_. Then return to `step 3` to _cover_ again columns.
  *
  * `Step 5` needs several helper functions. First, we need
- * a function to find _starred zeros_ in columns. 
+ * a function to find _starred zeros_ in columns.
  */
 void find_star_in_col (const int &col, int &row,
         const arma::umat &indM, const unsigned int &N)
@@ -283,8 +282,8 @@ void find_star_in_col (const int &col, int &row,
 }
 /**
  * Then we need a function to find a _primed zero_ in a row.
- * Note, that these tasks are easily performed by searching the 
- * indicator matrix `indM`. 
+ * Note, that these tasks are easily performed by searching the
+ * indicator matrix `indM`.
  */
 void find_prime_in_row (const int &row, int &col,
         const arma::umat &indM, const unsigned int &N)
@@ -297,8 +296,8 @@ void find_prime_in_row (const int &row, int &col,
 }
 /**
  * In addition we need a function to augment the path, one to
- * clear the _covers_ from rows and one to erase the _primed zeros_ 
- * from the indicator matrix `indM`. 
+ * clear the _covers_ from rows and one to erase the _primed zeros_
+ * from the indicator matrix `indM`.
  */
 void augment_path (const int &path_count, arma::umat &indM,
         const arma::imat &path)
@@ -331,13 +330,13 @@ void erase_primes(arma::umat &indM, const unsigned int &N)
 /**
  * The function to augment the path gets an integer matrix `path`
  * of dimension 2 * N x 2. In it all vertices between rows and columns
- * are stored row-wise. 
+ * are stored row-wise.
  * Now, we can set the complete `step 5`:
  */
 void step_five (unsigned int &step,
-        arma::umat &indM, arma::ivec &rcov, 
-        arma::ivec &ccov, arma::imat &path, 
-        int &rpath_0, int &cpath_0, 
+        arma::umat &indM, arma::ivec &rcov,
+        arma::ivec &ccov, arma::imat &path,
+        int &rpath_0, int &cpath_0,
         const unsigned int &N)
 {
     bool done = false;
@@ -347,9 +346,9 @@ void step_five (unsigned int &step,
     path.at(path_count - 1, 0) = rpath_0;
     path.at(path_count - 1, 1) = cpath_0;
     while (!done) {
-        find_star_in_col(path.at(path_count - 1, 1), row, 
+        find_star_in_col(path.at(path_count - 1, 1), row,
                 indM, N);
-        if (row > -1) {                                
+        if (row > -1) {
             /* Starred zero in row 'row' */
             ++path_count;
             path.at(path_count - 1, 0) = row;
@@ -358,10 +357,10 @@ void step_five (unsigned int &step,
             done = true;
         }
         if (!done) {
-            /* If there is a starred zero find a primed 
+            /* If there is a starred zero find a primed
              * zero in this row; write index to 'col' */
-            find_prime_in_row(path.at(path_count - 1, 0), col, 
-                    indM, N);  
+            find_prime_in_row(path.at(path_count - 1, 0), col,
+                    indM, N);
             ++path_count;
             path.at(path_count - 1, 0) = path.at(path_count - 2, 0);
             path.at(path_count - 1, 1) = col;
@@ -373,24 +372,24 @@ void step_five (unsigned int &step,
     step = 3;
 }
 /**
- * Recall, if `step 4` was successfull in uncovering all columns 
+ * Recall, if `step 4` was successfull in uncovering all columns
  * and covering all rows with a primed zero, it then calls
- * `step 6`. 
- * `Step 6` takes the cover vectors `rcov` and `ccov` and looks 
+ * `step 6`.
+ * `Step 6` takes the cover vectors `rcov` and `ccov` and looks
  * in the uncovered region of the cost matrix for the smallest
  * value. It then subtracts this value from each element in an
- * _uncovered column_ and adds it to each element in a _covered row_. 
- * After this transformation, the algorithm starts again at `step 4`. 
- * Our last helper function searches for the smallest value in 
+ * _uncovered column_ and adds it to each element in a _covered row_.
+ * After this transformation, the algorithm starts again at `step 4`.
+ * Our last helper function searches for the smallest value in
  * the uncovered region of the cost matrix.
  */
-void find_smallest (double &minval, const arma::mat &cost, 
-        const arma::ivec &rcov, const arma::ivec &ccov, 
+void find_smallest (double &minval, const arma::mat &cost,
+        const arma::ivec &rcov, const arma::ivec &ccov,
         const unsigned int &N)
 {
     for (unsigned int r = 0; r < N; ++r) {
         for (unsigned int c = 0; c < N; ++c) {
-            if (rcov.at(r) == 0 && ccov.at(c) == 0) {                                                                    
+            if (rcov.at(r) == 0 && ccov.at(c) == 0) {
                 if (minval > cost.at(r, c)) {
                     minval = cost.at(r, c);
                 }
@@ -402,8 +401,8 @@ void find_smallest (double &minval, const arma::mat &cost,
  * `Step 6` looks as follows:
  */
 void step_six (unsigned int &step, arma::mat &cost,
-        const arma::ivec &rcov, const arma::ivec &ccov, 
-        const unsigned int &N) 
+        const arma::ivec &rcov, const arma::ivec &ccov,
+        const unsigned int &N)
 {
     double minval = DBL_MAX;
     find_smallest(minval, cost, rcov, ccov, N);
@@ -420,9 +419,9 @@ void step_six (unsigned int &step, arma::mat &cost,
     step = 4;
 }
 /**
- * At last, we must create a function that enables us to 
- * jump around the different steps of the algorithm. 
- * The following code shows the main function of 
+ * At last, we must create a function that enables us to
+ * jump around the different steps of the algorithm.
+ * The following code shows the main function of
  * the algorithm. It defines also the important variables
  * to be passed to the different steps.
  */
@@ -455,14 +454,14 @@ arma::umat hungarian(const arma::mat &input_cost)
                 step_four(step, cost, indM, rcov, ccov,
                         rpath_0, cpath_0, N);
                 break;
-            case 5: 
+            case 5:
                 step_five(step, indM, rcov, ccov,
                         path, rpath_0, cpath_0, N);
                 break;
             case 6:
                 step_six(step, cost, rcov, ccov, N);
                 break;
-            case 7:            
+            case 7:
                 done = true;
                 break;
         }
@@ -471,22 +470,23 @@ arma::umat hungarian(const arma::mat &input_cost)
 }
 /**
  * Note, this function takes the numeric cost matrix as
- * an argument and returns the integer indicator matrix 
- * `indM`. 
- * 
+ * an argument and returns the integer indicator matrix
+ * `indM`.
+ *
  * I chose to set the argument `input_cost` constant and copy
  * it for reasons of reusability of the cost matrix in other
  * C++ code. When working with rather huge cost matrices, it
- * makes sense to make the argument mutable. Though, I used 
- * _pass-by-reference_ for all the arguments in functions to 
- * avoid useless copying inside the functions. 
+ * makes sense to make the argument mutable. Though, I used
+ * _pass-by-reference_ for all the arguments in functions to
+ * avoid useless copying inside the functions.
  *
- * To call the main function `hungarian` from R and to use 
- * our algorithm we construct an `Rcpp Attribute`: 
+ * To call the main function `hungarian` from R and to use
+ * our algorithm we construct an `Rcpp Attribute`:
  */
 
+//' hungarian_cc
+//' @param cost cost matrix
 // [[Rcpp::export]]
-
 arma::imat hungarian_cc(Rcpp::NumericMatrix cost)
 {
     // Reuse memory from R
@@ -499,15 +499,17 @@ arma::imat hungarian_cc(Rcpp::NumericMatrix cost)
     return arma::conv_to<arma::imat>::from(indM);
 }
 
-/** 
+/**
  * If we want to provide this function also to other users
- * we should probably ensure, that the matrix is square (There 
+ * we should probably ensure, that the matrix is square (There
  * exists also an extension to rectangular matrices, see
  * [Burgeois and Lasalle (1971)](http://dl.acm.org/citation.cfm?id=362945)).
- * This can be done easily with the exceptions provided by 
+ * This can be done easily with the exceptions provided by
  * `Rcpp` passed over to R:
  */
 
+//' hungariansafe_cc
+//' @param cost cost matrix
 // [[Rcpp::export]]
 arma::imat hungariansafe_cc(Rcpp::NumericMatrix cost)
 {
@@ -526,18 +528,18 @@ arma::imat hungariansafe_cc(Rcpp::NumericMatrix cost)
 }
 
 /**
- * Note, that it is also possible to use for the attribute 
- * directly an `Armadillo` matrix, but following the [recent 
+ * Note, that it is also possible to use for the attribute
+ * directly an `Armadillo` matrix, but following the [recent
  * discussion on the Rcpp-devel list](http://www.mail-archive.com/rcpp-devel@lists.r-forge.r-project.org/msg05784.html),
  * a _pass-by-reference_ of arguments is not yet possible. Romain
  * Francois' proposals seem promising, so maybe we can expect
- * in some of the next releases _shallow_ copies allowing 
- * _pass-by-reference_ in `Rcpp Attributes`. 
+ * in some of the next releases _shallow_ copies allowing
+ * _pass-by-reference_ in `Rcpp Attributes`.
  */
 
 /**
  * Let us begin now with a very easy example that makes clear
- * what is going on. 
+ * what is going on.
  */
 
 /*** R
@@ -553,9 +555,9 @@ min.cost
 */
 
 /**
- * We can also compute a maximal assignment over a revenue 
- * matrix by simply considering the difference between 
- * a big value and this matrix as a cost matrix. 
+ * We can also compute a maximal assignment over a revenue
+ * matrix by simply considering the difference between
+ * a big value and this matrix as a cost matrix.
  */
 
 /*** R
@@ -581,7 +583,7 @@ min.cost
 */
 
 /**
- * Finally let us make some benchmarking. We load the 
+ * Finally let us make some benchmarking. We load the
  * rbenchmark package and take now a more _realistic_ cost
  * matrix.
  */
@@ -604,8 +606,8 @@ system.time(indM <- hungarian_cc(cost))
  * Some last notes on the structure of the code. I prefer to
  * put the code of the algorithm in an header file, e.g.
  * `hungarian.h`. And use an `attributes.cpp` (`attributes.cc`)
- * file to program the `Rcpp Attributes`. With this, 
+ * file to program the `Rcpp Attributes`. With this,
  * I can easily reuse the algorithm in C++ code by simple
- * inclusion (`#include "hungarian.h"`) and have a complete 
+ * inclusion (`#include "hungarian.h"`) and have a complete
  * overview on all the C++ functions I export to R.
  */
