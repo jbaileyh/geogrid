@@ -2,7 +2,6 @@
 #'
 #' Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
 #' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
-#' @param shape_details An object returned from calling \code{get_shape_details} on \code{shape}. If not specified, it will be automatically computed from \code{shape}.
 #' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
 #' @param grid_type Either "hexagonal" for a hexagonal grid (default) or "regular" for a regular grid.
 #' @param seed An optional random seed integer to be used for the grid calculation algorithm.
@@ -16,7 +15,7 @@
 #' original_shapes <- read_polygons(input_file)
 #'
 #' # calculate grid
-#' new_cells <- calculate_cell_size(shape = original_shapes,
+#' new_cells <- calculate_grid(shape = original_shapes,
 #'   grid_type = "hexagonal", seed = 1)
 #' plot(new_cells)
 #'
@@ -29,11 +28,11 @@
 #' # look at different grids using different seeds
 #' par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 #' for (i in 1:6) {
-#'   new_cells <- calculate_cell_size(shape = original_shapes, grid_type = "hexagonal", seed = i)
+#'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
 #' }
-calculate_cell_size <- function(shape, shape_details = NULL,
+calculate_grid <- function(shape,
   learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
   seed = NULL, verbose = FALSE) {
 
@@ -42,8 +41,7 @@ calculate_cell_size <- function(shape, shape_details = NULL,
   # = c('regular', 'hexagonal') check that regular and hexagon dont
   # return different lists of points (list and list[[]] respectively?)
 
-  if (is.null(shape_details))
-    shape_details <- get_shape_details(shape)
+  shape_details <- get_shape_details(shape)
 
   grid_type <- match.arg(grid_type)
 

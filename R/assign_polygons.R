@@ -3,7 +3,7 @@
 #' Assigns each polygon in the original file to a new location in the gridded geometry. Enables the use of three assignment algorithms.
 #'
 #' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
-#' @param new_polygons A "geogrid" object returned from \code{\link{calculate_cell_size}}.
+#' @param new_polygons A "geogrid" object returned from \code{\link{calculate_grid}}.
 #' @importFrom rgeos gCentroid
 #' @importFrom sp SpatialPolygonsDataFrame coordinates spDistsN1 spDists merge
 #' @return A SpatialPolygonsDataFrame.
@@ -14,7 +14,7 @@
 #' original_shapes <- read_polygons(input_file)
 #'
 #' # calculate grid
-#' new_cells <- calculate_cell_size(shape = original_shapes,
+#' new_cells <- calculate_grid(shape = original_shapes,
 #'   grid_type = "hexagonal", seed = 1)
 #' plot(new_cells)
 #'
@@ -27,7 +27,7 @@
 #' # look at different grids using different seeds
 #' par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 #' for (i in 1:6) {
-#'   new_cells <- calculate_cell_size(shape = original_shapes, grid_type = "hexagonal", seed = i)
+#'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
 #' }
@@ -39,7 +39,7 @@ assign_polygons <- function(shape, new_polygons) {
 
   if (!inherits(new_polygons, "geogrid"))
     stop("'new_polygons' must be an object obtained ",
-      "from calling calculate_cell_size().")
+      "from calling calculate_grid().")
 
   new_points <- new_polygons[[1]]
   vector_length <- length(shape)

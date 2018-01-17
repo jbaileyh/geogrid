@@ -1,9 +1,8 @@
 #' Extract details from provided polygons.
 #'
-#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_cell_size}}.
+#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
 #'
 #' @param input_shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
-#' @export
 get_shape_details <- function(input_shape) {
 
   nhex <- length(input_shape)

@@ -10,5 +10,5 @@ get_shape_details(input_shape)
 \item{input_shape}{A "SpatialPolygonsDataFrame" object representing the original spatial polygons.}
 }
 \description{
-Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_cell_size}}.
+Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
 }

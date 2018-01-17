@@ -15,7 +15,7 @@
 #' original_shapes <- read_polygons(input_file)
 #'
 #' # calculate grid
-#' new_cells <- calculate_cell_size(shape = original_shapes,
+#' new_cells <- calculate_grid(shape = original_shapes,
 #'   grid_type = "hexagonal", seed = 1)
 #' plot(new_cells)
 #'
@@ -28,7 +28,7 @@
 #' # look at different grids using different seeds
 #' par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 #' for (i in 1:6) {
-#'   new_cells <- calculate_cell_size(shape = original_shapes, grid_type = "hexagonal", seed = i)
+#'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
 #' }
