@@ -1,5 +1,5 @@
 Package: hexmapr
-Title: Assigning real spaces to hexagonal and regular grids
+Title: Turn geospatial polygons into regular or hexagonal grids
 Version: 0.1.0
 Authors@R: c(
     person("Joseph", "Bailey", email = "jbailey@futurecities.catapult.org.uk", role = c("aut", "cre")),
@@ -7,7 +7,7 @@ Authors@R: c(
     person("Lars Simon Zehnder", role = "ctb",
       comment = "RcppArmadillo implmentation of Munkres' Assignment Algorithm"
     ))
-Description: Turn irregular polygons (such as geographical regions) into regular grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm. This prevents the need for manual generation of hexgrids or regular grids that are supposed to reflect existing geography.
+Description: Turn irregular polygons (such as geographical regions) into regular or hexagonal grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm. This prevents the need for manual generation of hexgrids or regular grids that are supposed to reflect existing geography.
 Imports:
     methods,
     sp,
