@@ -8,7 +8,7 @@ test_that("general usage works", {
   expect_s4_class(original_shapes, "SpatialPolygonsDataFrame")
   expect_length(original_shapes, 33)
 
-  new_cells <- calculate_cell_size(shape = original_shapes,
+  new_cells <- calculate_grid(shape = original_shapes,
     grid_type = "hexagonal", seed = 1)
 
   expect_s3_class(new_cells, "geogrid")

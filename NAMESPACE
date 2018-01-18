@@ -3,6 +3,7 @@
 S3method(plot,geogrid)
 export(assign_polygons)
 export(calculate_cell_size)
+export(calculate_grid)
 export(get_shape_details)
 export(read_polygons)
 exportPattern("^[[:alpha:]]+")

@@ -1,10 +1,9 @@
 #' Extract details from provided polygons.
 #'
-#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_cell_size}}.
+#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
 #'
 #' @param input_shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
-#' @export
-get_shape_details <- function(input_shape) {
+get_shape_details_internal <- function(input_shape) {
 
   nhex <- length(input_shape)
 
@@ -40,4 +39,16 @@ get_shape_details <- function(input_shape) {
   class(shape_details) <- c("shape_details", "list")
 
   return(shape_details)
+}
+
+#' Extract details from provided polygons (deprecated).
+#'
+#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
+#'
+#' @param input_shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @export
+get_shape_details <- function(input_shape) {
+  stop("get_shape_details() has been deprecated. ",
+    "It is now handled automatically in calculate_grid().",
+    call. = FALSE)
 }
