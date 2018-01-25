@@ -1,4 +1,4 @@
 library(testthat)
-library(hexmapr)
+library(geogrid)
 
-test_check("hexmapr")
+test_check("geogrid")

@@ -53,7 +53,7 @@ This is a basic example which shows how the assignment of London boroughs could 
 library(ggplot2)
 library(gridExtra)
 library(viridis)
-# devtools::install_github("sassalley/geogrid")
+# devtools::install_github("jbaileyh/geogrid")
 library(geogrid)
 
 input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
