@@ -1,4 +1,4 @@
-#' hexmapr
+#' geogrid
 #'
 #' Turn irregular polygons (such as geographical regions) into regular grids.
 #'
@@ -6,12 +6,12 @@
 #' @author Joseph Bailey <jbailey@futurecities.catapult.org.uk>
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
-#' @useDynLib hexmapr
+#' @useDynLib geogrid
 #' @exportPattern "^[[:alpha:]]+"
-#' @name hexmapr
+#' @name geogrid
 #' @examples
 #' \dontrun{
-#' input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+#' input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
 #' original_shapes <- read_polygons(input_file)
 #'
 #' # calculate grid

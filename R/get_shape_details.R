@@ -9,7 +9,7 @@ get_shape_details_internal <- function(input_shape) {
 
   if (nhex < 4)
     message("Your shape has fewer than 5 polygons. ",
-      "Please be aware that a hexmap may have limited value.")
+      "Please be aware that a geogrid may have limited value.")
 
   # Start off with guidance but start with bins that are too large
   # (cellsize too large)
@@ -28,7 +28,7 @@ get_shape_details_internal <- function(input_shape) {
   start_width <- ifelse(xrange > yrange, xrange, yrange)
 
   # Let's assume that the user want's something more than 4 hexagons wide
-  # or long. If they want something this small then a hexmap is probably
+  # or long. If they want something this small then a geogrid is probably
   # not worth it.
   start_size <- start_width / 100
   total_area <- input_shape@polygons[[1]]@Polygons[[1]]@area

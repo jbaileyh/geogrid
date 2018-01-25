@@ -2,7 +2,7 @@ context("general")
 
 test_that("general usage works", {
 
-  input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+  input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
   original_shapes <- read_polygons(input_file)
 
   expect_s4_class(original_shapes, "SpatialPolygonsDataFrame")

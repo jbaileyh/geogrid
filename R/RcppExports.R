@@ -4,12 +4,12 @@
 #' hungarian_cc
 #' @param cost cost matrix
 hungarian_cc <- function(cost) {
-    .Call('_hexmapr_hungarian_cc', PACKAGE = 'hexmapr', cost)
+    .Call('_geogrid_hungarian_cc', PACKAGE = 'geogrid', cost)
 }
 
 #' hungariansafe_cc
 #' @param cost cost matrix
 hungariansafe_cc <- function(cost) {
-    .Call('_hexmapr_hungariansafe_cc', PACKAGE = 'hexmapr', cost)
+    .Call('_geogrid_hungariansafe_cc', PACKAGE = 'geogrid', cost)
 }
 

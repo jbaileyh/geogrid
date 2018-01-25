@@ -1,5 +1,5 @@
 ---
-title: "Algorithmic tesselation with hexmapr"
+title: "Algorithmic tesselation with geogrid"
 author: "Joseph Bailey"
 date: "`r format(Sys.Date())`"
 output:
@@ -13,11 +13,11 @@ output:
 knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "README_figs/README-")
 ```
 
-[![Travis-CI Build Status](https://travis-ci.org/sassalley/hexmapr.svg?branch=master)](https://travis-ci.org/sassalley/hexmapr)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/hexmapr)](https://cran.r-project.org/package=hexmapr)
-[![Coverage Status](https://img.shields.io/codecov/c/github/sassalley/hexmapr/master.svg)](https://codecov.io/github/sassalley/hexmapr?branch=master)
+[![Travis-CI Build Status](https://travis-ci.org/jbaileyh/geogrid.svg?branch=master)](https://travis-ci.org/jbaileyh/geogrid)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/geogrid)](https://cran.r-project.org/package=geogrid)
+[![Coverage Status](https://img.shields.io/codecov/c/github/jbaileyh/geogrid/master.svg)](https://codecov.io/github/jbaileyh/geogrid?branch=master)
 
-# hexmapr
+# geogrid
 
 Turn geospatial polygons like states, counties or local authorities into regular or hexagonal grids automatically.
 
@@ -36,11 +36,11 @@ The link in bullet 4 provides an excellent introduction to the notion of tessela
 
 Recent functionality for representing US states, European countries and World countries in a grid has been made available for ggplot2 [here](https://hafen.github.io/geofacet/) and there are many other great examples of **hand-specified** or **bespoke** grids. The challenge with this is that if you have a less commonly used geography then it might be hard to find a  **hand-specified** or **bespoke** grid for your area of interest.
 
-What I wanted to do with `hexmapr` is make it easier to generate these grids in ways that might be visually appealing and then assign the original geographies to their gridded counterparts in a way that made sense. Using an input of geospatial polgyons `hexmapr` will generate either a regular or hexagonal grid, and then assign each of the polygons in your original file to that new grid.
+What I wanted to do with `geogrid` is make it easier to generate these grids in ways that might be visually appealing and then assign the original geographies to their gridded counterparts in a way that made sense. Using an input of geospatial polgyons `geogrid` will generate either a regular or hexagonal grid, and then assign each of the polygons in your original file to that new grid.
 
 ## Idea
 
-There are two steps to using `hexmapr`:
+There are two steps to using `geogrid`:
 
 1. Generate a regular or hexagonal grid of your choice. There are lots of different arrangements of these grids so choosing one with the `calculate_grid` function and varying the `seed` is a good place to start.
 2. Use the [**hungarian algorithm**](https://en.wikipedia.org/wiki/Hungarian_algorithm) to efficiently calculate the assignments from the original geography to the new geography. This involves identifying the solution where the total distance between the centroid of every original geography and its new centroid on the grid is minimised. For this I have included a previous implementation of the Hungarian algorithm kindly made available [here](https://github.com/RcppCore/rcpp-gallery/blob/gh-pages/src/2013-09-24-minimal-assignment.cpp). Huge thanks to Lars Simon Zehnder for this implementation.
@@ -53,10 +53,10 @@ This is a basic example which shows how the assignment of London boroughs could 
 library(ggplot2)
 library(gridExtra)
 library(viridis)
-# devtools::install_github("sassalley/hexmapr")
-library(hexmapr)
+# devtools::install_github("jbaileyh/geogrid")
+library(geogrid)
 
-input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
 original_shapes <- read_polygons(input_file)
 ```
 
@@ -173,6 +173,8 @@ I welcome critique and feedback. Blog post to follow.
 
 I read a lot of the work by [Hadley Wickham](http://hadley.nz/), [Jenny Bryan](https://github.com/jennybc), [Thomas Lin Pedersen](https://www.data-imaginist.com/about/), [Mara Averick](https://twitter.com/dataandme?lang=en) and [Bob Rudis](https://github.com/hrbrmstr) to name a few. But also love the R community and learn a huge amount from [R Bloggers](https://www.r-bloggers.com/).
 
+Extra thanks go to [Ryan Hafen](http://ryanhafen.com/) for making this package publishable.
+
 # Other examples
 
 From others:
@@ -184,7 +186,7 @@ From me:
 This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
 
 ```{r example5, message=FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
-input_file <- system.file("extdata", "states.json", package = "hexmapr")
+input_file <- system.file("extdata", "states.json", package = "geogrid")
 original_shapes <- read_polygons(input_file)
 raw <- read_polygons(input_file)
 raw@data$xcentroid <- sp::coordinates(raw)[,1]
@@ -252,7 +254,7 @@ grid.arrange(rawplot, regplot, hexplot, layout_matrix = rbind(c(1, 1), c(2, 3)))
 Likewise, you can try the bay area...
 
 ```{r example8, message=FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
-input_file <- system.file("extdata", "bay_counties.geojson", package = "hexmapr")
+input_file <- system.file("extdata", "bay_counties.geojson", package = "geogrid")
 original_shapes <- read_polygons(input_file)
 raw <- read_polygons(input_file)
 raw@data$xcentroid <- sp::coordinates(raw)[,1]

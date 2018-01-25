@@ -1,4 +1,4 @@
-Package: hexmapr
+Package: geogrid
 Title: Turn geospatial polygons into regular or hexagonal grids
 Version: 0.1.0
 Authors@R: c(
@@ -21,5 +21,5 @@ LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat,
     covr
 RoxygenNote: 6.0.1
-URL: https://github.com/sassalley/hexmapr
-BugReports: https://github.com/sassalley/hexmapr/issues
+URL: https://github.com/jbaileyh/geogrid
+BugReports: https://github.com/jbaileyh/geogrid/issues

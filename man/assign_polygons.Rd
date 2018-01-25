@@ -19,7 +19,7 @@ Assigns each polygon in the original file to a new location in the gridded geome
 }
 \examples{
 \dontrun{
-input_file <- system.file("extdata", "london_LA.json", package = "hexmapr")
+input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
 original_shapes <- read_polygons(input_file)
 
 # calculate grid
