@@ -1,5 +1,5 @@
 Package: geogrid
-Title: Turn geospatial polygons into regular or hexagonal grids
+Title: Turn Geospatial Polygons into Regular or Hexagonal Grids
 Version: 0.1.0
 Authors@R: c(
     person("Joseph", "Bailey", email = "jbailey@futurecities.catapult.org.uk", role = c("aut", "cre")),

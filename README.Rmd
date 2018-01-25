@@ -10,7 +10,7 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 ```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "README_figs/README-")
+knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "man/README_figs/README-")
 ```
 
 [![Travis-CI Build Status](https://travis-ci.org/jbaileyh/geogrid.svg?branch=master)](https://travis-ci.org/jbaileyh/geogrid)
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "REA
 
 Turn geospatial polygons like states, counties or local authorities into regular or hexagonal grids automatically.
 
-<img src="README_figs/README-example4-1.png" width="672" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example4-1.png" width="672" style="display: block; margin: auto;" />
 
 ## Intro
 
