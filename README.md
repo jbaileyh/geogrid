@@ -13,7 +13,7 @@ geogrid
 
 Turn geospatial polygons like states, counties or local authorities into regular or hexagonal grids automatically.
 
-<img src="README_figs/README-example4-1.png" width="672" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example4-1.png" width="672" style="display: block; margin: auto;" />
 
 Intro
 -----
@@ -80,7 +80,7 @@ rawplot <- ggplot(result_df_raw) +
 rawplot
 ```
 
-<img src="README_figs/README-example0-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example0-1.png" width="768" style="display: block; margin: auto;" />
 
 So, let's turn this into a grid to stop places like Bromley, Hillingdon and Havering from stealing our attention. First of all, we can generate a number of different grids using `seed`. Since there are many ways to dissect the outer boundary of the polygons you might want to choose an output that appeals to you. I'd reccomend looking at different `seed` values and choosing the one that best matches the outline that you approve of.
 
@@ -94,7 +94,7 @@ for (i in 1:6) {
 }
 ```
 
-<img src="README_figs/README-example1-1.png" width="768" style="display: block; margin: auto;" /> Let's also look at things with a regular grid.
+<img src="man/README_figs/README-example1-1.png" width="768" style="display: block; margin: auto;" /> Let's also look at things with a regular grid.
 
 ``` r
 par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
@@ -104,7 +104,7 @@ for (i in 1:6) {
 }
 ```
 
-<img src="README_figs/README-example2-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example2-1.png" width="768" style="display: block; margin: auto;" />
 
 As we can see there are lots of options. Now, lets choose a grid and assign our existing places to it. I happen to like the both grids that have a `seed` of 3. So i'm going to assign the polygons to those grids. Let's do that and see what they look like compared to the original.
 
@@ -141,7 +141,7 @@ regplot <- ggplot(result_df_reg) +
 grid.arrange(rawplot, regplot, hexplot, layout_matrix = rbind(c(1, 1), c(2, 3)))
 ```
 
-<img src="README_figs/README-example4-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example4-1.png" width="768" style="display: block; margin: auto;" />
 
 Details
 -------
@@ -221,7 +221,7 @@ for (i in 1:6) {
 }
 ```
 
-<img src="README_figs/README-example6-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example6-1.png" width="768" style="display: block; margin: auto;" />
 
 ``` r
 par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
@@ -231,7 +231,7 @@ for (i in 1:6) {
 }
 ```
 
-<img src="README_figs/README-example6a-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example6a-1.png" width="768" style="display: block; margin: auto;" />
 
 Now we've seen some seed demo's lets assign them...
 
@@ -264,7 +264,7 @@ regplot <- ggplot(result_df_reg) +
 grid.arrange(rawplot, regplot, hexplot, layout_matrix = rbind(c(1, 1), c(2, 3)))
 ```
 
-<img src="README_figs/README-example7-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example7-1.png" width="768" style="display: block; margin: auto;" />
 
 Likewise, you can try the bay area...
 
@@ -309,4 +309,4 @@ regplot <- ggplot(result_df_reg) +
 grid.arrange(rawplot, regplot, hexplot, layout_matrix = rbind(c(1, 1), c(2, 3)))
 ```
 
-<img src="README_figs/README-example8-1.png" width="768" style="display: block; margin: auto;" />
+<img src="man/README_figs/README-example8-1.png" width="768" style="display: block; margin: auto;" />
