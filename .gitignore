@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 .DS_Store
+*.o
+*.so
+*.dll
