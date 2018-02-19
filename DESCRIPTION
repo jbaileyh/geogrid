@@ -7,7 +7,7 @@ Authors@R: c(
     person("Lars Simon Zehnder", role = "ctb",
       comment = "RcppArmadillo implmentation of Munkres' Assignment Algorithm"
     ))
-Description: Turn irregular polygons (such as geographical regions) into regular or hexagonal grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm, Kuhn (1955) <doi:https://doi.org/10.1007/978-3-540-68279-0_2>. This prevents the need for manual generation of hexagonal grids or regular grids that are supposed to reflect existing geography.
+Description: Turn irregular polygons (such as geographical regions) into regular or hexagonal grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm, Kuhn (1955) (<doi:https://doi.org/10.1007/978-3-540-68279-0_2>). This prevents the need for manual generation of hexagonal grids or regular grids that are supposed to reflect existing geography.
 Imports:
     methods,
     sp,
