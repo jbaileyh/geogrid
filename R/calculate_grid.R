@@ -10,7 +10,6 @@
 #' @importFrom methods as
 #' @export
 #' @examples
-#' \dontrun{
 #' input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
 #' original_shapes <- read_polygons(input_file)
 #'
@@ -30,7 +29,6 @@
 #' for (i in 1:6) {
 #'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
-#' }
 #' }
 calculate_grid <- function(shape,
   learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
