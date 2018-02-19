@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
+/src/*.o
+/src/*.o-*
+/src/*.so
+/src/*.d
