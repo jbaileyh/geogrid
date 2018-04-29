@@ -1,7 +1,7 @@
 #' Calculate grid from spatial polygons.
 #'
 #' Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
-#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param shape A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.
 #' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
 #' @param grid_type Either "hexagonal" for a hexagonal grid (default) or "regular" for a regular grid.
 #' @param seed An optional random seed integer to be used for the grid calculation algorithm.

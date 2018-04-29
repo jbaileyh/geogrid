@@ -2,12 +2,12 @@
 #'
 #' Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
 #'
-#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param shape A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.
 #' @param new_polygons A "geogrid" object returned from \code{\link{calculate_grid}}.
 #' @importFrom rgeos gCentroid
 #' @importFrom sp SpatialPolygonsDataFrame coordinates spDistsN1 spDists merge
 #' @importFrom sf st_as_sf
-#' @return A SpatialPolygonsDataFrame.
+#' @return An object of the same class as shape
 #' @export
 #' @examples
 #' input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
@@ -30,7 +30,6 @@
 #'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
-
 assign_polygons <- function(shape, new_polygons){
         UseMethod("assign_polygons")
 }

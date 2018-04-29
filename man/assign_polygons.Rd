@@ -13,12 +13,12 @@ assign_polygons(shape, new_polygons)
 \method{assign_polygons}{sf}(shape, new_polygons)
 }
 \arguments{
-\item{shape}{A "SpatialPolygonsDataFrame" object representing the original spatial polygons.}
+\item{shape}{A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.}
 
 \item{new_polygons}{A "geogrid" object returned from \code{\link{calculate_grid}}.}
 }
 \value{
-A SpatialPolygonsDataFrame.
+An object of the same class as shape
 }
 \description{
 Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.

@@ -16,7 +16,7 @@ calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
   grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE)
 }
 \arguments{
-\item{shape}{A "SpatialPolygonsDataFrame" object representing the original spatial polygons.}
+\item{shape}{A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.}
 
 \item{learning_rate}{The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.}
 
