@@ -8,6 +8,7 @@
 #' @param verbose A logical indicating whether messages should be printed as the algorithm iterates.
 #' @importFrom sp spsample HexPoints2SpatialPolygons SpatialPixels
 #' @importFrom methods as
+#' @importFrom sf st_as_sf
 #' @export
 #' @examples
 #' input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
@@ -31,6 +32,14 @@
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
 calculate_grid <- function(shape,
+                           learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+                           seed = NULL, verbose = FALSE) {
+        UseMethod("calculate_grid")
+}
+
+#' @rdname calculate_grid
+#' @export
+calculate_grid.SpatialPolygonsDataFrame <- function(shape,
   learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
   seed = NULL, verbose = FALSE) {
 
@@ -96,6 +105,18 @@ calculate_grid <- function(shape,
   class(res) <- c("geogrid", "list")
 
   return(res)
+}
+
+#' @rdname calculate_grid
+#' @export
+calculate_grid.sf <- function(shape,
+                              learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+                              seed = NULL, verbose = FALSE) {
+        st_as_sf(calculate_grid.SpatialPolygonsDataFrame(as(shape, "Spatial"), 
+                                                         learning_rate = learning_rate, 
+                                                         grid_type = grid_type,
+                                                         seed = seed, 
+                                                         verbose = verbose))
 }
 
 #' Calculate size of grid items (deprecated).

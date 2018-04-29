@@ -6,6 +6,7 @@
 #' @param new_polygons A "geogrid" object returned from \code{\link{calculate_grid}}.
 #' @importFrom rgeos gCentroid
 #' @importFrom sp SpatialPolygonsDataFrame coordinates spDistsN1 spDists merge
+#' @importFrom sf st_as_sf
 #' @return A SpatialPolygonsDataFrame.
 #' @export
 #' @examples
@@ -29,7 +30,14 @@
 #'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
-assign_polygons <- function(shape, new_polygons) {
+
+assign_polygons <- function(shape, new_polygons){
+        UseMethod("assign_polygons")
+}
+
+#' @rdname assign_polygons
+#' @export
+assign_polygons.SpatialPolygonsDataFrame <- function(shape, new_polygons) {
   original_points <- rgeos::gCentroid(shape, byid = TRUE)
   shape@data$CENTROIX <- original_points$x
   shape@data$CENTROIY <- original_points$y
@@ -89,4 +97,10 @@ assign_polygons <- function(shape, new_polygons) {
   combi <- sp::merge(shape@data, final_table, by.x = "key_orig")
   combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
   return(combi2)
+}
+
+#' @rdname assign_polygons
+#' @export
+assign_polygons.sf <- function(shape, new_polygons){
+        st_as_sf(assign_polygons.SpatialPolygonsDataFrame(as(shape, "Spatial"), as(new_polygons, "Spatial")))
 }

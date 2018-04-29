@@ -2,9 +2,15 @@
 % Please edit documentation in R/assign_polygons.R
 \name{assign_polygons}
 \alias{assign_polygons}
+\alias{assign_polygons.SpatialPolygonsDataFrame}
+\alias{assign_polygons.sf}
 \title{Assign the polygons in the original spatial data to their new location.}
 \usage{
 assign_polygons(shape, new_polygons)
+
+\method{assign_polygons}{SpatialPolygonsDataFrame}(shape, new_polygons)
+
+\method{assign_polygons}{sf}(shape, new_polygons)
 }
 \arguments{
 \item{shape}{A "SpatialPolygonsDataFrame" object representing the original spatial polygons.}
@@ -18,7 +24,6 @@ A SpatialPolygonsDataFrame.
 Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
 }
 \examples{
-\dontrun{
 input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
 original_shapes <- read_polygons(input_file)
 
@@ -38,6 +43,5 @@ par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 for (i in 1:6) {
   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
   plot(new_cells, main = paste("Seed", i, sep=" "))
-}
 }
 }
