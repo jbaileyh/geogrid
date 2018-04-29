@@ -112,11 +112,11 @@ calculate_grid.SpatialPolygonsDataFrame <- function(shape,
 calculate_grid.sf <- function(shape,
                               learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
                               seed = NULL, verbose = FALSE) {
-        st_as_sf(calculate_grid.SpatialPolygonsDataFrame(as(shape, "Spatial"), 
+        calculate_grid.SpatialPolygonsDataFrame(as(shape, "Spatial"), 
                                                          learning_rate = learning_rate, 
                                                          grid_type = grid_type,
                                                          seed = seed, 
-                                                         verbose = verbose))
+                                                         verbose = verbose)
 }
 
 #' Calculate size of grid items (deprecated).

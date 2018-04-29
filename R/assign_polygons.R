@@ -102,5 +102,5 @@ assign_polygons.SpatialPolygonsDataFrame <- function(shape, new_polygons) {
 #' @rdname assign_polygons
 #' @export
 assign_polygons.sf <- function(shape, new_polygons){
-        st_as_sf(assign_polygons.SpatialPolygonsDataFrame(as(shape, "Spatial"), as(new_polygons, "Spatial")))
+        st_as_sf(assign_polygons.SpatialPolygonsDataFrame(as(shape, "Spatial"), new_polygons))
 }
