@@ -2,11 +2,12 @@
 #'
 #' Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
 #'
-#' @param shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param shape A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.
 #' @param new_polygons A "geogrid" object returned from \code{\link{calculate_grid}}.
 #' @importFrom rgeos gCentroid
 #' @importFrom sp SpatialPolygonsDataFrame coordinates spDistsN1 spDists merge
-#' @return A SpatialPolygonsDataFrame.
+#' @importFrom sf st_as_sf
+#' @return An object of the same class as shape
 #' @export
 #' @examples
 #' input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
@@ -29,7 +30,13 @@
 #'   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
 #'   plot(new_cells, main = paste("Seed", i, sep=" "))
 #' }
-assign_polygons <- function(shape, new_polygons) {
+assign_polygons <- function(shape, new_polygons){
+        UseMethod("assign_polygons")
+}
+
+#' @rdname assign_polygons
+#' @export
+assign_polygons.SpatialPolygonsDataFrame <- function(shape, new_polygons) {
   original_points <- rgeos::gCentroid(shape, byid = TRUE)
   shape@data$CENTROIX <- original_points$x
   shape@data$CENTROIY <- original_points$y
@@ -89,4 +96,10 @@ assign_polygons <- function(shape, new_polygons) {
   combi <- sp::merge(shape@data, final_table, by.x = "key_orig")
   combi2 <- sp::merge(s_poly, combi, by.x = "key_new")
   return(combi2)
+}
+
+#' @rdname assign_polygons
+#' @export
+assign_polygons.sf <- function(shape, new_polygons){
+        st_as_sf(assign_polygons.SpatialPolygonsDataFrame(as(shape, "Spatial"), new_polygons))
 }
