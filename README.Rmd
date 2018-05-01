@@ -85,7 +85,7 @@ rawplot <- ggplot(result_df_raw) +
 rawplot
 ```
 
-So, let's turn this into a grid to stop places like Bromley, Hillingdon and Havering from stealing our attention. First of all, we can generate a number of different grids using `seed`. Since there are many ways to dissect the outer boundary of the polygons you might want to choose an output that appeals to you. I'd reccomend looking at different `seed` values and choosing the one that best matches the outline that you approve of.
+So, let's turn this into a grid to stop places like Bromley, Hillingdon and Havering from stealing our attention. First of all, we can generate a number of different grids using `seed`. Since there are many ways to dissect the outer boundary of the polygons you might want to choose an output that appeals to you. I'd recommend looking at different `seed` values and choosing the one that best matches the outline that you approve of.
 
 The `calculate_grid` function takes in a SpatialPolygonsDataframe, a learning rate (suggestion = 0.03 to begin), a grid type `hexagonal` or `regular` and a seed value. Let's have a look at some hexagonal grid options for the London local authorities:
 
@@ -106,7 +106,7 @@ for (i in 1:6) {
 }
 ```
 
-As we can see there are lots of options. Now, lets choose a grid and assign our existing places to it. I happen to like the both grids that have a `seed` of 3. So i'm going to assign the polygons to those grids. Let's do that and see what they look like compared to the original.
+As we can see there are lots of options. Now, lets choose a grid and assign our existing places to it. I happen to like the both grids that have a `seed` of 3. So I'm going to assign the polygons to those grids. Let's do that and see what they look like compared to the original.
 
 ```{r example3, message=FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 new_cells_hex <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = 3)
@@ -165,7 +165,7 @@ The package has three major functions:
 
 ## Notes
 
-This is my first attempt at a package. If it doesn't work i'd like suggestions for improvements and thanks in advance for providing them!
+This is my first attempt at a package. If it doesn't work I'd like suggestions for improvements and thanks in advance for providing them!
 
 I welcome critique and feedback. Blog post to follow.
 
@@ -183,7 +183,7 @@ Simon Hailstone has looked at [male life expectancy in the South East region of 
 
 From me:
 
-This time using the contiguous USA. Again, I used set seed and chose some that I liked but i'd reccomend you'd do the same.
+This time using the contiguous USA. Again, I used set seed and chose some that I liked but I'd recommend you'd do the same.
 
 ```{r example5, message=FALSE, warning=FALSE, results='hide', fig.keep='all', fig.align='center'}
 input_file <- system.file("extdata", "states.json", package = "geogrid")
