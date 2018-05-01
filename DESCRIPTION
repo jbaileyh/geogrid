@@ -1,13 +1,19 @@
 Package: geogrid
 Title: Turn Geospatial Polygons into Regular or Hexagonal Grids
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Joseph", "Bailey", email = "jbailey@futurecities.catapult.org.uk", role = c("aut", "cre")),
     person("Ryan", "Hafen", email = "rhafen@gmail.com", role = "ctb"),
-    person("Lars Simon Zehnder", role = "ctb",
-      comment = "RcppArmadillo implmentation of Munkres' Assignment Algorithm"
+    person("Jakub", "Nowosad", email = "nowosad.jakub@gmail.com", role = "ctb", comment = c(ORCID = "0000-0002-1057-3721")),
+    person("Lars Simon Zehnder", role = "ctb", 
+           comment = "RcppArmadillo implmentation of Munkres' Assignment Algorithm"
     ))
-Description: Turn irregular polygons (such as geographical regions) into regular or hexagonal grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm, Kuhn (1955) (<doi:10.1007/978-3-540-68279-0_2>). This prevents the need for manual generation of hexagonal grids or regular grids that are supposed to reflect existing geography.
+Description: Turn irregular polygons (such as geographical regions) into regular or hexagonal grids.
+    This package enables the generation of regular (square) and hexagonal grids through the package 
+    'sp' and then assigns the content of the existing polygons to the new grid using 
+    the Hungarian algorithm, Kuhn (1955) (<doi:10.1007/978-3-540-68279-0_2>). 
+    This prevents the need for manual generation of hexagonal grids or regular grids 
+    that are supposed to reflect existing geography.
 Imports:
     methods,
     sp,
@@ -17,7 +23,9 @@ Imports:
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
 Suggests: testthat,
     covr
 RoxygenNote: 6.0.1
