@@ -9,11 +9,13 @@
 calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
   "regular"), seed = NULL, verbose = FALSE)
 
-\method{calculate_grid}{SpatialPolygonsDataFrame}(shape, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE)
+\method{calculate_grid}{SpatialPolygonsDataFrame}(shape,
+  learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+  seed = NULL, verbose = FALSE)
 
 \method{calculate_grid}{sf}(shape, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE)
+  grid_type = c("hexagonal", "regular"), seed = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{shape}{A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.}
@@ -30,24 +32,26 @@ calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
 Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
 }
 \examples{
+library(sf)
 input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
-original_shapes <- read_polygons(input_file)
+original_shapes <- st_read(input_file) \%>\% st_set_crs(27700)
 
 # calculate grid
 new_cells <- calculate_grid(shape = original_shapes,
   grid_type = "hexagonal", seed = 1)
-plot(new_cells)
-
-#
 grid_shapes <- assign_polygons(original_shapes, new_cells)
-par(mfrow=c(1, 2))
-sp::plot(original_shapes)
-sp::plot(grid_shapes)
+plot(grid_shapes)
 
+par(mfrow = c(1, 2))
+plot(st_geometry(original_shapes))
+plot(st_geometry(grid_shapes))
+
+\dontrun{
 # look at different grids using different seeds
 par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 for (i in 1:6) {
   new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
   plot(new_cells, main = paste("Seed", i, sep=" "))
+}
 }
 }

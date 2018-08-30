@@ -5,7 +5,8 @@
 \title{Calculate size of grid items (deprecated).}
 \usage{
 calculate_cell_size(shape, shape_details = NULL, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE)
+  grid_type = c("hexagonal", "regular"), seed = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{shape}{A "SpatialPolygonsDataFrame" object representing the original spatial polygons.}
