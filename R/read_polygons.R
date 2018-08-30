@@ -6,6 +6,7 @@
 #' @importFrom sp CRS
 #' @export
 read_polygons <- function(file) {
+  .Deprecated("sf::st_read")
 
   # check resulting file is polgyons
   shape <- sf::st_read(file)
