@@ -5,7 +5,7 @@ if (requireNamespace("lintr", quietly = TRUE)) {
   line_exclusions <- c("src/RcppExports.cpp", "R/RcppExports.R")
 
   test_that("package Style", {
-    lintr::expect_lint_free(cache = TRUE,
-      line_exclusions = line_exclusions)
+    lintr::expect_lint_free(cache =TRUE,
+      exclusions = line_exclusions)
   })
 }
