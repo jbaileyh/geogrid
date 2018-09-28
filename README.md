@@ -1,7 +1,7 @@
 Algorithmic tesselation with geogrid
 ================
 Joseph Bailey
-2018-08-30
+2018-09-28
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -104,7 +104,7 @@ library(sf)
 library(tmap)
 
 input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
-original_shapes <- st_read(input_file) %>% st_set_crs(NA)
+original_shapes <- st_read(input_file) %>% st_set_crs(27700)
 original_shapes$SNAME <- substr(original_shapes$NAME, 1, 4)
 ```
 
@@ -254,7 +254,7 @@ same.
 
 ``` r
 input_file2 <- system.file("extdata", "states.json", package = "geogrid")
-original_shapes2 <- st_read(input_file2)
+original_shapes2 <- st_read(input_file2) %>% st_transform(2163)
 original_shapes2$SNAME <- substr(original_shapes2$NAME, 1, 4)
   
 rawplot2 <- tm_shape(original_shapes2) +
@@ -311,18 +311,12 @@ Likewise, you can try the bay
 area…
 
 ``` r
-input_file <- system.file("extdata", "bay_counties.geojson", package = "geogrid")
-original_shapes <- read_polygons(input_file)
-raw <- read_polygons(input_file)
-raw@data$xcentroid <- sp::coordinates(raw)[,1]
-raw@data$ycentroid <- sp::coordinates(raw)[,2]
-
 input_file3 <- system.file("extdata", "bay_counties.geojson", package = "geogrid")
-original_shapes3 <- st_read(input_file3)
+original_shapes3 <- st_read(input_file3) %>% st_transform(3310)
 original_shapes3$SNAME <- substr(original_shapes3$county, 1, 4)
   
 rawplot3 <- tm_shape(original_shapes3) +
-  tm_polygons() +
+  tm_polygons(col = "gray25") +
   tm_text("SNAME")
 
 new_cells_hex3 <- calculate_grid(shape = original_shapes3, grid_type = "hexagonal", seed = 6)
@@ -332,11 +326,11 @@ new_cells_reg3 <- calculate_grid(shape = original_shapes3, grid_type = "regular"
 resultreg3 <- assign_polygons(original_shapes3, new_cells_reg3)
 
 hexplot3 <- tm_shape(resulthex3) + 
-  tm_polygons() +
+  tm_polygons(col = "gray25") +
   tm_text("SNAME")
 
 regplot3 <- tm_shape(resultreg3) + 
-  tm_polygons() +
+  tm_polygons(col = "gray25") +
   tm_text("SNAME")
 
 tmap_arrange(rawplot3, hexplot3, regplot3, nrow = 3)

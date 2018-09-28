@@ -26,7 +26,9 @@ LazyData: true
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Suggests: testthat,
+Suggests: 
+    testthat,
+    lintr,
     covr
 RoxygenNote: 6.1.0
 URL: https://github.com/jbaileyh/geogrid
