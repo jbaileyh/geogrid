@@ -432,10 +432,10 @@ arma::umat hungarian(const arma::mat &input_cost)
     int cpath_0 = 0;
     int rpath_0 = 0;
     arma::mat cost(input_cost);
-    arma::umat indM(N, N);
-    arma::ivec rcov(N);
-    arma::ivec ccov(N);
-    arma::imat path(2 * N, 2);
+    arma::umat indM(N, N, arma::fill::ones);
+    arma::ivec rcov(N, arma::fill::ones);
+    arma::ivec ccov(N, arma::fill::ones);
+    arma::imat path(2 * N, 2, arma::fill::ones);
 
     indM = arma::zeros<arma::umat>(N, N);
     bool done = false;
