@@ -2,17 +2,17 @@
 % Please edit documentation in R/calculate_grid.R
 \name{plot.geogrid}
 \alias{plot.geogrid}
-\title{Plot a "geogrid" object}
+\title{Plot a 'geogrid' object}
 \usage{
 \method{plot}{geogrid}(x, y, ...)
 }
 \arguments{
-\item{x}{An object of class "geogrid" to plot.}
+\item{x}{An object of class 'geogrid' to plot.}
 
 \item{y}{ignored}
 
-\item{...}{Additional parameters passed to the "sp" package's plot method.}
+\item{...}{Additional parameters passed to the 'sp' package's plot method.}
 }
 \description{
-Plot a "geogrid" object
+Plot a 'geogrid' object
 }

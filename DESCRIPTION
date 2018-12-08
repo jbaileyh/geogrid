@@ -30,6 +30,6 @@ Suggests:
     testthat,
     lintr,
     covr
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 URL: https://github.com/jbaileyh/geogrid
 BugReports: https://github.com/jbaileyh/geogrid/issues

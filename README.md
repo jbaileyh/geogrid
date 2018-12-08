@@ -1,7 +1,7 @@
 Algorithmic tesselation with geogrid
 ================
 Joseph Bailey
-2018-09-28
+2018-12-07
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
