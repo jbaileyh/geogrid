@@ -12,4 +12,3 @@ hungarian_cc <- function(cost) {
 hungariansafe_cc <- function(cost) {
     .Call("_geogrid_hungariansafe_cc", PACKAGE = "geogrid", cost)
 }
-
