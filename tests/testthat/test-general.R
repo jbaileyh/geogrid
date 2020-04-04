@@ -3,10 +3,15 @@ context("general")
 test_that("general usage works", {
 
   input_file <- system.file("extdata", "london_LA.json", package = "geogrid")
-  original_shapes <- read_polygons(input_file)
+  # This generates a warning telling us that using the CRS argument in this
+  # way simply replaces the CRS attribute and does not transform/modify any
+  # coordinates. Because this is what we want, we suppress the warnings.
+  suppressWarnings(
+    original_shapes <- sf::st_read(input_file, crs = 27700)
+    )
 
-  expect_s4_class(original_shapes, "SpatialPolygonsDataFrame")
-  expect_length(original_shapes, 33)
+  expect_s3_class(original_shapes, "sf")
+  expect_equal(nrow(original_shapes), 33)
 
   new_cells <- calculate_grid(shape = original_shapes,
     grid_type = "hexagonal", seed = 1)
@@ -25,7 +30,7 @@ test_that("general usage works", {
   expect_equivalent(crds, comp)
 
   grid_shapes <- assign_polygons(original_shapes, new_cells)
-  expect_s4_class(grid_shapes, "SpatialPolygonsDataFrame")
-  expect_length(grid_shapes, 33)
+  expect_s3_class(grid_shapes, "sf")
+  expect_equal(nrow(grid_shapes), 33)
   # should test the content of grid_shapes to ensure it contains what we expect
 })
