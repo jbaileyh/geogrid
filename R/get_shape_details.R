@@ -1,8 +1,11 @@
 #' Extract details from provided polygons.
 #'
-#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
+#' Extract spatial extent, range and other geospatial features from the output
+#' of read_polygons. Items are returned as a list for use in
+#' \code{\link{calculate_grid}}.
 #'
-#' @param input_shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param input_shape A "SpatialPolygonsDataFrame" object representing the
+#' original spatial polygons.
 get_shape_details_internal <- function(input_shape) {
 
   nhex <- length(input_shape)
@@ -13,15 +16,9 @@ get_shape_details_internal <- function(input_shape) {
 
   # Start off with guidance but start with bins that are too large
   # (cellsize too large)
-  # shape_summary <- input_shape@bbox
-
-  #xmax <- shape_summary[2][[1]][1, 2]
   xmax <- input_shape@bbox[3]
-  #ymax <- shape_summary[2][[1]][2, 2]
   ymax <- input_shape@bbox[4]
-  #xmin <- shape_summary[2][[1]][1, 1]
   xmin <- input_shape@bbox[1]
-  #ymin <- shape_summary[2][[1]][2, 1]
   ymin <- input_shape@bbox[2]
   xrange <- (xmax - xmin)
   yrange <- (ymax - ymin)
@@ -43,9 +40,12 @@ get_shape_details_internal <- function(input_shape) {
 
 #' Extract details from provided polygons (deprecated).
 #'
-#' Extract spatial extent, range and other geospatial features from the output of read_polygons. Items are returned as a list for use in \code{\link{calculate_grid}}.
+#' Extract spatial extent, range and other geospatial features from the output
+#' of read_polygons. Items are returned as a list for use in
+#' \code{\link{calculate_grid}}.
 #'
-#' @param input_shape A "SpatialPolygonsDataFrame" object representing the original spatial polygons.
+#' @param input_shape A "SpatialPolygonsDataFrame" object representing the
+#' original spatial polygons.
 #' @export
 get_shape_details <- function(input_shape) {
   stop("get_shape_details() has been deprecated. ",

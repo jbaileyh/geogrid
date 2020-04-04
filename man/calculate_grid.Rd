@@ -6,21 +6,35 @@
 \alias{calculate_grid.sf}
 \title{Calculate grid from spatial polygons.}
 \usage{
-calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
-  "regular"), seed = NULL, verbose = FALSE)
+calculate_grid(
+  shape,
+  learning_rate = 0.03,
+  grid_type = c("hexagonal", "regular"),
+  seed = NULL,
+  verbose = FALSE
+)
 
-\method{calculate_grid}{SpatialPolygonsDataFrame}(shape,
-  learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
-  seed = NULL, verbose = FALSE)
+\method{calculate_grid}{SpatialPolygonsDataFrame}(
+  shape,
+  learning_rate = 0.03,
+  grid_type = c("hexagonal", "regular"),
+  seed = NULL,
+  verbose = FALSE
+)
 
-\method{calculate_grid}{sf}(shape, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL,
-  verbose = FALSE)
+\method{calculate_grid}{sf}(
+  shape,
+  learning_rate = 0.03,
+  grid_type = c("hexagonal", "regular"),
+  seed = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{shape}{A 'SpatialPolygonsDataFrame' or an sf object representing the original spatial polygons.}
 
-\item{learning_rate}{The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.}
+\item{learning_rate}{The rate at which the gradient descent finds the optimum cellsize to ensure
+that your gridded points fit within the outer boundary of the input polygons.}
 
 \item{grid_type}{Either 'hexagonal' for a hexagonal grid (default) or 'regular' for a regular grid.}
 
@@ -29,7 +43,8 @@ calculate_grid(shape, learning_rate = 0.03, grid_type = c("hexagonal",
 \item{verbose}{A logical indicating whether messages should be printed as the algorithm iterates.}
 }
 \description{
-Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
+Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular
+grid that strives to preserve the original geography.
 }
 \examples{
 library(sf)
