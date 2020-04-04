@@ -1,7 +1,8 @@
 #' Import spatial data.
 #'
 #' Simple function to read spatial data into a SpatialPolygonsDataFrame. Based on st_read from package sf.
-#' @param file A file path pointing to a shapefile or GeoJSON file, or a character string holding GeoJSON data. See the \code{dsn} argument of \code{\link[sf]{st_read}} for more details.
+#' @param file A file path pointing to a shapefile or GeoJSON file, or a character string holding
+#' GeoJSON data. See the \code{dsn} argument of \code{\link[sf]{st_read}} for more details.
 #' @importFrom sf st_read
 #' @importFrom sp CRS
 #' @export

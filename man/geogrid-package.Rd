@@ -27,7 +27,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Ryan Hafen \email{rhafen@gmail.com} [contributor]
-  \item Jakub Nowosad \email{nowosad.jakub@gmail.com} (0000-0002-1057-3721) [contributor]
+  \item Jakub Nowosad \email{nowosad.jakub@gmail.com} (\href{https://orcid.org/0000-0002-1057-3721}{ORCID}) [contributor]
   \item Lars Simon Zehnder (RcppArmadillo implmentation of Munkres' Assignment Algorithm) [contributor]
 }
 

@@ -1,8 +1,10 @@
 #' Calculate grid from spatial polygons.
 #'
-#' Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular grid that strives to preserve the original geography.
+#' Given an input multipolgyon spatial data frame this function calculates a hexagonal or regular
+#' grid that strives to preserve the original geography.
 #' @param shape A 'SpatialPolygonsDataFrame' or an sf object representing the original spatial polygons.
-#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
+#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure
+#' that your gridded points fit within the outer boundary of the input polygons.
 #' @param grid_type Either 'hexagonal' for a hexagonal grid (default) or 'regular' for a regular grid.
 #' @param seed An optional random seed integer to be used for the grid calculation algorithm.
 #' @param verbose A logical indicating whether messages should be printed as the algorithm iterates.
@@ -33,15 +35,16 @@
 #'   plot(new_cells, main = paste('Seed', i, sep=' '))
 #' }
 #' }
-calculate_grid <- function(shape, learning_rate = 0.03, grid_type = c("hexagonal",
-                                                                      "regular"), seed = NULL, verbose = FALSE) {
+calculate_grid <- function(shape, learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+                                  seed = NULL, verbose = FALSE) {
   UseMethod("calculate_grid")
 }
 
 #' @rdname calculate_grid
 #' @export
-calculate_grid.SpatialPolygonsDataFrame <- function(shape, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE) {
+calculate_grid.SpatialPolygonsDataFrame <- function(shape, learning_rate = 0.03, # nolint
+                                                    grid_type = c("hexagonal", "regular"),
+                                                    seed = NULL, verbose = FALSE) {
 
   if (!is.null(seed))
     set.seed(seed)
@@ -53,11 +56,8 @@ calculate_grid.SpatialPolygonsDataFrame <- function(shape, learning_rate = 0.03,
   grid_type <- match.arg(grid_type)
 
   if (!inherits(shape_details, "shape_details"))
-    stop("'shape_details' must be an object obtained ", "from calling get_shape_details().")
-
-  # Lets find some bounds for the optimisation that make sense.  max_allowed_area
-  # <- shape_details$total_area / shape_details$nhex hexagon_diam <-
-  # sqrt(max_allowed_area / 2.598076) * 2
+    stop("\"shape_details\" must be an object obtained ",
+         "from calling get_shape_details().")
 
   cellsize <- shape_details$start_size
 
@@ -77,7 +77,6 @@ calculate_grid.SpatialPolygonsDataFrame <- function(shape, learning_rate = 0.03,
       cellsize_new <- cellsize * (1 + learning_rate)
       cellsize <- cellsize_new
     } else {
-      # else (npolygons < shape_details$nhex)
       if (verbose)
         message("too few polygons")
       cellsize_new <- cellsize * (1 - learning_rate)
@@ -106,18 +105,20 @@ calculate_grid.SpatialPolygonsDataFrame <- function(shape, learning_rate = 0.03,
 
 #' @rdname calculate_grid
 #' @export
-calculate_grid.sf <- function(shape, learning_rate = 0.03, grid_type = c("hexagonal",
-                                                                         "regular"), seed = NULL, verbose = FALSE) {
+calculate_grid.sf <- function(shape, learning_rate = 0.03, grid_type = c("hexagonal", "regular"),
+                                      seed = NULL, verbose = FALSE) {
   calculate_grid(as(shape, "Spatial"), learning_rate = learning_rate, grid_type = grid_type,
                  seed = seed, verbose = verbose)
 }
 
 #' Calculate size of grid items (deprecated).
 #'
-#' Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+#' Given an input multipolgyon spatial data frame this function calculates the required cell size of
+#' a regular or hexagonal grid.
 #' @param shape A 'SpatialPolygonsDataFrame' object representing the original spatial polygons.
 #' @param shape_details deprecated.
-#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.
+#' @param learning_rate The rate at which the gradient descent finds the optimum cellsize to ensure
+#' that your gridded points fit within the outer boundary of the input polygons.
 #' @param grid_type Either 'hexagonal' for a hexagonal grid (default) or 'regular' for a regular grid.
 #' @param seed An optional random seed integer to be used for the grid calculation algorithm.
 #' @param verbose A logical indicating whether messages should be printed as the algorithm iterates.
@@ -127,7 +128,8 @@ calculate_grid.sf <- function(shape, learning_rate = 0.03, grid_type = c("hexago
 calculate_cell_size <- function(shape, shape_details = NULL, learning_rate = 0.03,
                                 grid_type = c("hexagonal", "regular"), seed = NULL, verbose = FALSE) {
 
-  stop("calculate_cell_size() has been deprecated. Please use ", "calculate_grid() instead.",
+  stop("calculate_cell_size() has been deprecated. Please use ",
+       "calculate_grid() instead.",
        call. = FALSE)
 }
 

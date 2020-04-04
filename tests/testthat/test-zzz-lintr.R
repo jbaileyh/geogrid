@@ -1,10 +1,8 @@
-# https://github.com/jimhester/lintr
+    # https://github.com/jimhester/lintr
 if (requireNamespace("lintr", quietly = TRUE)) {
     context("lints")
 
-    line_exclusions <- c("src/RcppExports.cpp", "R/RcppExports.R")
-
     test_that("package Style", {
-        lintr::expect_lint_free(cache = TRUE, exclusions = line_exclusions)
+        lintr::expect_lint_free(cache = TRUE, exclusions = list("R/RcppExports.R"))
     })
 }

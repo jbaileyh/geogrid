@@ -4,16 +4,22 @@
 \alias{calculate_cell_size}
 \title{Calculate size of grid items (deprecated).}
 \usage{
-calculate_cell_size(shape, shape_details = NULL, learning_rate = 0.03,
-  grid_type = c("hexagonal", "regular"), seed = NULL,
-  verbose = FALSE)
+calculate_cell_size(
+  shape,
+  shape_details = NULL,
+  learning_rate = 0.03,
+  grid_type = c("hexagonal", "regular"),
+  seed = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{shape}{A 'SpatialPolygonsDataFrame' object representing the original spatial polygons.}
 
 \item{shape_details}{deprecated.}
 
-\item{learning_rate}{The rate at which the gradient descent finds the optimum cellsize to ensure that your gridded points fit within the outer boundary of the input polygons.}
+\item{learning_rate}{The rate at which the gradient descent finds the optimum cellsize to ensure
+that your gridded points fit within the outer boundary of the input polygons.}
 
 \item{grid_type}{Either 'hexagonal' for a hexagonal grid (default) or 'regular' for a regular grid.}
 
@@ -22,5 +28,6 @@ calculate_cell_size(shape, shape_details = NULL, learning_rate = 0.03,
 \item{verbose}{A logical indicating whether messages should be printed as the algorithm iterates.}
 }
 \description{
-Given an input multipolgyon spatial data frame this function calculates the required cell size of a regular or hexagonal grid.
+Given an input multipolgyon spatial data frame this function calculates the required cell size of
+a regular or hexagonal grid.
 }
