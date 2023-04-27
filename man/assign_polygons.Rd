@@ -13,15 +13,18 @@ assign_polygons(shape, new_polygons)
 \method{assign_polygons}{sf}(shape, new_polygons)
 }
 \arguments{
-\item{shape}{A "SpatialPolygonsDataFrame" or an sf object representing the original spatial polygons.}
+\item{shape}{A "SpatialPolygonsDataFrame" or an sf object representing the
+original spatial polygons.}
 
-\item{new_polygons}{A "geogrid" object returned from \code{\link{calculate_grid}}.}
+\item{new_polygons}{A "geogrid" object returned from
+\code{\link{calculate_grid}}.}
 }
 \value{
 An object of the same class as shape
 }
 \description{
-Assigns each polygon in the original file to a new location in the gridded geometry using the Hungarian algorithm.
+Assigns each polygon in the original file to a new location in the gridded
+geometry using the Hungarian algorithm.
 }
 \examples{
 library(sf)
@@ -42,7 +45,8 @@ plot(st_geometry(grid_shapes))
 # look at different grids using different seeds
 par(mfrow=c(2, 3), mar = c(0, 0, 2, 0))
 for (i in 1:6) {
-  new_cells <- calculate_grid(shape = original_shapes, grid_type = "hexagonal", seed = i)
+  new_cells <- calculate_grid(shape = original_shapes,
+    grid_type = "hexagonal", seed = i)
   plot(new_cells, main = paste("Seed", i, sep=" "))
 }
 }

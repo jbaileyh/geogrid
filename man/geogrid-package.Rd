@@ -6,12 +6,7 @@
 \alias{geogrid-package}
 \title{geogrid: Turn Geospatial Polygons into Regular or Hexagonal Grids}
 \description{
-Turn irregular polygons (such as geographical regions) into regular or hexagonal grids.
-    This package enables the generation of regular (square) and hexagonal grids through the package 
-    'sp' and then assigns the content of the existing polygons to the new grid using 
-    the Hungarian algorithm, Kuhn (1955) (<doi:10.1007/978-3-540-68279-0_2>). 
-    This prevents the need for manual generation of hexagonal grids or regular grids 
-    that are supposed to reflect existing geography.
+Turn irregular polygons (such as geographical regions) into regular or hexagonal grids. This package enables the generation of regular (square) and hexagonal grids through the package 'sp' and then assigns the content of the existing polygons to the new grid using the Hungarian algorithm, Kuhn (1955) (\doi{10.1007/978-3-540-68279-0_2}). This prevents the need for manual generation of hexagonal grids or regular grids that are supposed to reflect existing geography.
 }
 \seealso{
 Useful links:
@@ -27,7 +22,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Ryan Hafen \email{rhafen@gmail.com} [contributor]
-  \item Jakub Nowosad \email{nowosad.jakub@gmail.com} (0000-0002-1057-3721) [contributor]
+  \item Jakub Nowosad \email{nowosad.jakub@gmail.com} (\href{https://orcid.org/0000-0002-1057-3721}{ORCID}) [contributor]
   \item Lars Simon Zehnder (RcppArmadillo implmentation of Munkres' Assignment Algorithm) [contributor]
 }
 
